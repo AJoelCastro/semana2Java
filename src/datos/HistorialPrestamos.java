@@ -78,6 +78,28 @@ public class HistorialPrestamos {
         return prest;
     }
     
+    public PrestamoBibliotecario buscarPrestamoPorLibro(String nomLibro) {
+        PrestamoBibliotecario prest = new PrestamoBibliotecario();
+        ArrayList<PrestamoBibliotecario> lista = leerIngresos();
+        for (PrestamoBibliotecario prestamo : lista) {
+            if(nomLibro.equals(prestamo.getLibro().getTitulo())){
+                prest = prestamo;
+            }
+        }
+        return prest;
+    }
+    
+    public PrestamoBibliotecario buscarPrestamoPorIdLector(String idLector) {
+        PrestamoBibliotecario prest = new PrestamoBibliotecario();
+        ArrayList<PrestamoBibliotecario> lista = leerIngresos();
+        for (PrestamoBibliotecario prestamo : lista) {
+            if(idLector.equals(prestamo.getLector().getId())){
+                prest = prestamo;
+            }
+        }
+        return prest;
+    }
+    
     public void aniadirPrestamo(PrestamoBibliotecario prestamo) {
         try (RandomAccessFile raf = new RandomAccessFile(nombreArchivo, "rw")) {
             raf.seek(raf.length()); // Moverse al final del archivo
