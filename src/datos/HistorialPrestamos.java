@@ -42,22 +42,21 @@ public class HistorialPrestamos {
         DefaultTableModel modelo = new DefaultTableModel();
         String[] columnas = {
             "Titulo Libro", "ID Libro", "Autor", "Categoria",
-            "Nombre Lector", "DNI", "Fecha-Prestamo",
+            "Nombre Lector", "DNI", "Fecha-Prestamo", "Fecha-Prevista"
         };
         modelo.setColumnIdentifiers(columnas); // Establecer nombres de columnas
 
         ArrayList<PrestamoBibliotecario> lista = leerIngresos(); // Leer ingresos desde archivo
         for (PrestamoBibliotecario prestamo : lista) {
             Object[] fila = new Object[columnas.length];
-            fila[0] = prestamo
-            fila[1] = prestamo
-            fila[2] = prestamo
-            fila[3] = prestamo
-            fila[4] = prestamo
-            fila[5] = prestamo
-            fila[6] = prestamo
-            fila[7] = prestamo
-            fila[8] = prestamo // Método que retorna fecha en formato corto
+            fila[0] = prestamo.getLibro().getTitulo();
+            fila[1] = prestamo.getLibro().getId();
+            fila[2] = prestamo.getLibro().getAutor();
+            fila[3] = prestamo.getLibro().getCategoria();
+            fila[4] = prestamo.getLector().getNombre();
+            fila[5] = prestamo.getLector().getId();
+            fila[6] = prestamo.getFechaPrestamo();
+            fila[7] = prestamo.getFechaPrevista();
             modelo.addRow(fila); // Agregar fila al modelo de la tabla
         }
 
