@@ -33,7 +33,7 @@ public class panInicio extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        ImageIcon icon = new ImageIcon(getClass().getResource("/imagenes/bosque.jpg"));
+        ImageIcon icon = new ImageIcon(getClass().getResource("/imagenes/welcome.jpg"));
         Image image = icon.getImage();
         panFondo = new javax.swing.JPanel(){
             public void paintComponent(Graphics g){
@@ -44,42 +44,50 @@ public class panInicio extends javax.swing.JPanel {
                 g2d.drawImage(image, 0, 0, getWidth(), getHeight(), this);
 
                 // Aplicar un filtro oscuro para oscurecer la imagen (50% de opacidad)
-                g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.6f)); // Control de opacidad
-                g2d.setColor(new Color(0, 0, 0, 100)); // Color negro con cierta transparencia
-                g2d.fillRect(0, 0, getWidth(), getHeight()); // Rellenar el panel con el filtro oscuro
+                //g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.6f)); // Control de opacidad
+                //g2d.setColor(new Color(0, 0, 0, 100)); // Color negro con cierta transparencia
+                //g2d.fillRect(0, 0, getWidth(), getHeight()); // Rellenar el panel con el filtro oscuro
 
                 // Restaurar la opacidad a 1.0f (sin transparencia) para otros componentes
-                g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
-
-                // Después de restaurar la opacidad, puedes dibujar otros componentes sin que se vean afectados
-                // Ejemplo: Si tienes etiquetas, botones o cualquier otro componente, se dibujarán sin afectación
+                //g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
             }
         }
         ;
+        jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
 
         panFondo.setBackground(new java.awt.Color(0, 0, 0));
         panFondo.setForeground(new java.awt.Color(255, 255, 255));
 
-        jLabel2.setFont(new java.awt.Font("Segoe UI Semibold", 2, 42)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel2.setText("Bienvenido a la Biblioteca Digital Regional de Trujillo.");
+        jLabel1.setFont(new java.awt.Font("Roboto", 0, 100)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(60, 176, 200));
+        jLabel1.setText("Bienvenido");
+
+        jLabel2.setFont(new java.awt.Font("Yu Gothic", 0, 18)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(60, 176, 200));
+        jLabel2.setText("Sistema de control biliotecario");
 
         javax.swing.GroupLayout panFondoLayout = new javax.swing.GroupLayout(panFondo);
         panFondo.setLayout(panFondoLayout);
         panFondoLayout.setHorizontalGroup(
             panFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panFondoLayout.createSequentialGroup()
-                .addContainerGap(215, Short.MAX_VALUE)
+                .addContainerGap(396, Short.MAX_VALUE)
+                .addComponent(jLabel1)
+                .addGap(397, 397, 397))
+            .addGroup(panFondoLayout.createSequentialGroup()
+                .addGap(500, 500, 500)
                 .addComponent(jLabel2)
-                .addGap(41, 41, 41))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         panFondoLayout.setVerticalGroup(
             panFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panFondoLayout.createSequentialGroup()
-                .addGap(259, 259, 259)
+                .addGap(264, 264, 264)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(34, 34, 34)
                 .addComponent(jLabel2)
-                .addContainerGap(404, Short.MAX_VALUE))
+                .addContainerGap(311, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -96,6 +104,7 @@ public class panInicio extends javax.swing.JPanel {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel panFondo;
     // End of variables declaration//GEN-END:variables
