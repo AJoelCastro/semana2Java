@@ -4,11 +4,14 @@
  */
 package datos;
 
+import entidades.Lector;
+import entidades.Libro;
 import entidades.PrestamoBibliotecario;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
@@ -19,30 +22,84 @@ import javax.swing.table.DefaultTableModel;
  */
 public class HistorialPrestamos {
 
+    private final String nombreArchivo = "Historial Prestamos.txt";
+
     public ArrayList<PrestamoBibliotecario> leerIngresos() {
         ArrayList<PrestamoBibliotecario> historialPrestamos = new ArrayList<>();
-        File f = new File("Prestamos bibliotecarios.txt");
+        File archivo = new File(nombreArchivo);
+        if (!archivo.exists())
+            return historialPrestamos;
 
-        if (!f.exists()) 
-            return historialPrestamos; // Si el archivo no existe, retorna lista vacía
+        try (RandomAccessFile raf = new RandomAccessFile(archivo, "r")) {
+            while (raf.getFilePointer() < raf.length()) {
+                // Leer datos del archivo en el mismo orden que fueron guardados
+                String titulo = raf.readUTF();
+                String autor = raf.readUTF();
+                int copiasDisponibles = raf.readInt();
+                String nombreLector = raf.readUTF();
+                String fechaPrestamo = raf.readUTF();
+                String fechaPrevista = raf.readUTF();
+                String estadoLibro = raf.readUTF();
 
-        try (ObjectInputStream ingreso = new ObjectInputStream(new FileInputStream("Prestamos bibliotecarios.txt"))) {
-            // Leer lista serializada desde el archivo
-            historialPrestamos = (ArrayList<PrestamoBibliotecario>) ingreso.readObject();
+                Libro libro = new Libro();
+                libro.setTitulo(titulo);
+                libro.setAutor(autor);
+                libro.setCopiasDisponibles(copiasDisponibles);
+
+                Lector lector = new Lector();
+                lector.setNombre(nombreLector);
+
+                PrestamoBibliotecario prestamo = new PrestamoBibliotecario(
+                        fechaPrestamo, fechaPrevista, "--/--/--", estadoLibro, libro, lector
+                );
+
+                historialPrestamos.add(prestamo);
+            }
         } catch (IOException e) {
-            System.out.println("Ha ocurrido un error en la lectura: " + e.getMessage());
-        } catch (ClassNotFoundException e) {
-            System.out.println("Ha ocurrido un error en la lectura: " + e.getMessage());
+            System.out.println("Error leyendo archivo: " + e.getMessage());
         }
-
-        return historialPrestamos; // Retornar lista de ingresos leída del archivo
+        return historialPrestamos;
     }
 
+    public void aniadirPrestamo(PrestamoBibliotecario prestamo) {
+        try (RandomAccessFile raf = new RandomAccessFile(nombreArchivo, "rw")) {
+            raf.seek(raf.length()); // Moverse al final del archivo
+
+            // Guardar los datos en el mismo orden que los vas a leer después
+            raf.writeUTF(prestamo.getLibro().getTitulo());
+            raf.writeUTF(prestamo.getLibro().getAutor());
+            raf.writeInt(prestamo.getLibro().getCopiasDisponibles());
+            raf.writeUTF(prestamo.getLector().getNombre());
+            raf.writeUTF(prestamo.getFechaPrestamo());
+            raf.writeUTF(prestamo.getFechaPrevista());
+            raf.writeUTF(prestamo.getEstadoLibro());
+        } catch (IOException e) {
+            System.out.println("Error al añadir préstamo: " + e.getMessage());
+        }
+    }
+
+    public void guardarHistorialCompleto(ArrayList<PrestamoBibliotecario> lista) {
+        try (RandomAccessFile raf = new RandomAccessFile(nombreArchivo, "rw")) {
+            raf.setLength(0); // Vaciar el archivo antes de escribir
+
+            for (PrestamoBibliotecario prestamo : lista) {
+                raf.writeUTF(prestamo.getLibro().getTitulo());
+                raf.writeUTF(prestamo.getLibro().getAutor());
+                raf.writeInt(prestamo.getLibro().getCopiasDisponibles());
+                raf.writeUTF(prestamo.getLector().getNombre());
+                raf.writeUTF(prestamo.getFechaPrestamo());
+                raf.writeUTF(prestamo.getFechaPrevista());
+                raf.writeUTF(prestamo.getEstadoLibro());
+            }
+        } catch (IOException e) {
+            System.out.println("Error al guardar historial completo: " + e.getMessage());
+        }
+    }
     public DefaultTableModel getContenido() {
         DefaultTableModel modelo = new DefaultTableModel();
         String[] columnas = {
-            "Titulo Libro", "ID Libro", "Autor", "Categoria",
-            "Nombre Lector", "DNI", "Fecha-Prestamo", "Fecha-Prevista"
+            "Titulo Libro", "Autor", "Copias Disponibles",
+            "Nombre Lector", "Fecha-Prestamo", "Fecha-Prevista","Estado"
         };
         modelo.setColumnIdentifiers(columnas); // Establecer nombres de columnas
 
@@ -50,13 +107,12 @@ public class HistorialPrestamos {
         for (PrestamoBibliotecario prestamo : lista) {
             Object[] fila = new Object[columnas.length];
             fila[0] = prestamo.getLibro().getTitulo();
-            fila[1] = prestamo.getLibro().getId();
-            fila[2] = prestamo.getLibro().getAutor();
-            fila[3] = prestamo.getLibro().getCategoria();
-            fila[4] = prestamo.getLector().getNombre();
-            fila[5] = prestamo.getLector().getId();
-            fila[6] = prestamo.getFechaPrestamo();
-            fila[7] = prestamo.getFechaPrevista();
+            fila[1] = prestamo.getLibro().getAutor();
+            fila[2] = prestamo.getLibro().getCopiasDisponibles();
+            fila[3] = prestamo.getLector().getNombre();
+            fila[4] = prestamo.getFechaPrestamo();
+            fila[5] = prestamo.getFechaPrevista();
+            fila[6] = prestamo.getEstadoLibro();
             modelo.addRow(fila); // Agregar fila al modelo de la tabla
         }
 
