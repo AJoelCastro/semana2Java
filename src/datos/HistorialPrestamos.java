@@ -105,6 +105,19 @@ public class HistorialPrestamos {
         historialPrestamos.remove(prest);
         guardarHistorialCompleto(historialPrestamos);
     }
+    
+    public void editarPrestamo(int idPrestamo, String newDatePrevista, Libro lib, Lector lec){
+        PrestamoBibliotecario prest = buscarPrestamoTotal(idPrestamo);
+        ArrayList<PrestamoBibliotecario> historialPrestamos = leerIngresos();
+        if(historialPrestamos.contains(prest)){
+            prest.setFechaPrevista(newDatePrevista);
+            prest.setLibro(lib);
+            prest.setLector(lec);
+        }else{
+            return;
+        }
+        guardarHistorialCompleto(historialPrestamos);
+    }
 
     public void guardarHistorialCompleto(ArrayList<PrestamoBibliotecario> lista) {
         try (RandomAccessFile raf = new RandomAccessFile(nombreArchivo, "rw")) {
