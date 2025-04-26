@@ -71,6 +71,16 @@ public class HistorialPrestamos {
         }
         return lec;
     }
+    public PrestamoBibliotecario buscarPrestamoTotal(int idPrestamo) {
+        PrestamoBibliotecario prest = new PrestamoBibliotecario();
+        ArrayList<PrestamoBibliotecario> lista = leerIngresos();
+        for (PrestamoBibliotecario prestamo : lista) {
+            if(idPrestamo == prestamo.getIdPrestamo()){
+                prest = prestamo;
+            }
+        }
+        return prest;
+    }
     
     public void aniadirPrestamo(PrestamoBibliotecario prestamo) {
         try (RandomAccessFile raf = new RandomAccessFile(nombreArchivo, "rw")) {
@@ -88,6 +98,14 @@ public class HistorialPrestamos {
         } catch (IOException e) {
             System.out.println("Error al añadir préstamo: " + e.getMessage());
         }
+    }
+    public void eliminarPrestamo(int idPrestamo) {
+        PrestamoBibliotecario prest = new PrestamoBibliotecario();
+        prest = buscarPrestamoTotal(idPrestamo);
+        ArrayList<PrestamoBibliotecario> historialPrestamos = new ArrayList<>();
+        historialPrestamos = leerIngresos();
+        historialPrestamos.remove(prest);
+        guardarHistorialCompleto(historialPrestamos);
     }
 
     public void guardarHistorialCompleto(ArrayList<PrestamoBibliotecario> lista) {
