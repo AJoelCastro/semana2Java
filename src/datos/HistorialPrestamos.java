@@ -8,12 +8,9 @@ import entidades.Lector;
 import entidades.Libro;
 import entidades.PrestamoBibliotecario;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
-import java.util.List;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -46,8 +43,7 @@ public class HistorialPrestamos {
                 libro.setAutor(autor);
                 libro.setCopiasDisponibles(copiasDisponibles);
 
-                Lector lector = new Lector();
-                lector = buscarPrestamo(idPrestamo);
+                Lector lector = buscarPrestamo(idPrestamo);
 
                 PrestamoBibliotecario prestamo = new PrestamoBibliotecario(idPrestamo,
                         fechaPrestamo, fechaPrevista, "--/--/--", estadoLibro, libro, lector
@@ -92,6 +88,7 @@ public class HistorialPrestamos {
             raf.writeInt(prestamo.getIdPrestamo());
             raf.writeInt(prestamo.getLibro().getCopiasDisponibles());
             raf.writeUTF(prestamo.getLector().getNombre());
+            raf.writeUTF(prestamo.getLector().getTelefono());
             raf.writeUTF(prestamo.getFechaPrestamo());
             raf.writeUTF(prestamo.getFechaPrevista());
             raf.writeUTF(prestamo.getEstadoLibro());
@@ -129,6 +126,7 @@ public class HistorialPrestamos {
                 raf.writeInt(prestamo.getIdPrestamo());
                 raf.writeInt(prestamo.getLibro().getCopiasDisponibles());
                 raf.writeUTF(prestamo.getLector().getNombre());
+                raf.writeUTF(prestamo.getLector().getTelefono());
                 raf.writeUTF(prestamo.getFechaPrestamo());
                 raf.writeUTF(prestamo.getFechaPrevista());
                 raf.writeUTF(prestamo.getEstadoLibro());
@@ -141,7 +139,7 @@ public class HistorialPrestamos {
         DefaultTableModel modelo = new DefaultTableModel();
         String[] columnas = {
             "Titulo Libro", "Autor", "Id Prestamo", "Copias Disponibles",
-            "Nombre Lector", "Fecha-Prestamo", "Fecha-Prevista","Estado"
+            "Nombre Lector", "Telefono", "Fecha-Prestamo", "Fecha-Prevista","Estado"
         };
         modelo.setColumnIdentifiers(columnas); // Establecer nombres de columnas
 
@@ -153,9 +151,10 @@ public class HistorialPrestamos {
             fila[2] = prestamo.getIdPrestamo();
             fila[3] = prestamo.getLibro().getCopiasDisponibles();
             fila[4] = prestamo.getLector().getNombre();
-            fila[5] = prestamo.getFechaPrestamo();
-            fila[6] = prestamo.getFechaPrevista();
-            fila[7] = prestamo.getEstadoLibro();
+            fila[5] = prestamo.getLector().getTelefono();
+            fila[6] = prestamo.getFechaPrestamo();
+            fila[7] = prestamo.getFechaPrevista();
+            fila[8] = prestamo.getEstadoLibro();
             modelo.addRow(fila); // Agregar fila al modelo de la tabla
         }
 
