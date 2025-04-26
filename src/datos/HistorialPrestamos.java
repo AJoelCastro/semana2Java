@@ -33,11 +33,10 @@ public class HistorialPrestamos {
         try (RandomAccessFile raf = new RandomAccessFile(archivo, "r")) {
             while (raf.getFilePointer() < raf.length()) {
                 // Leer datos del archivo en el mismo orden que fueron guardados
-                int idPrestamo = raf.readInt();
                 String titulo = raf.readUTF();
                 String autor = raf.readUTF();
+                int idPrestamo = raf.readInt();
                 int copiasDisponibles = raf.readInt();
-                String nombreLector = raf.readUTF();
                 String fechaPrestamo = raf.readUTF();
                 String fechaPrevista = raf.readUTF();
                 String estadoLibro = raf.readUTF();
@@ -80,6 +79,7 @@ public class HistorialPrestamos {
             // Guardar los datos en el mismo orden que los vas a leer después
             raf.writeUTF(prestamo.getLibro().getTitulo());
             raf.writeUTF(prestamo.getLibro().getAutor());
+            raf.writeInt(prestamo.getIdPrestamo());
             raf.writeInt(prestamo.getLibro().getCopiasDisponibles());
             raf.writeUTF(prestamo.getLector().getNombre());
             raf.writeUTF(prestamo.getFechaPrestamo());
@@ -97,6 +97,7 @@ public class HistorialPrestamos {
             for (PrestamoBibliotecario prestamo : lista) {
                 raf.writeUTF(prestamo.getLibro().getTitulo());
                 raf.writeUTF(prestamo.getLibro().getAutor());
+                raf.writeInt(prestamo.getIdPrestamo());
                 raf.writeInt(prestamo.getLibro().getCopiasDisponibles());
                 raf.writeUTF(prestamo.getLector().getNombre());
                 raf.writeUTF(prestamo.getFechaPrestamo());
