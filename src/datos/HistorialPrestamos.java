@@ -100,10 +100,8 @@ public class HistorialPrestamos {
         }
     }
     public void eliminarPrestamo(int idPrestamo) {
-        PrestamoBibliotecario prest = new PrestamoBibliotecario();
-        prest = buscarPrestamoTotal(idPrestamo);
-        ArrayList<PrestamoBibliotecario> historialPrestamos = new ArrayList<>();
-        historialPrestamos = leerIngresos();
+        PrestamoBibliotecario prest = buscarPrestamoTotal(idPrestamo);
+        ArrayList<PrestamoBibliotecario> historialPrestamos = leerIngresos();
         historialPrestamos.remove(prest);
         guardarHistorialCompleto(historialPrestamos);
     }
