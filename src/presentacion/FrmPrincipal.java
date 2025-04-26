@@ -38,7 +38,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
         panel.setVisible(true);
         
     }
-
+    private String hola;
 
     /**
      * This method is called from within the constructor to initialize the form.
