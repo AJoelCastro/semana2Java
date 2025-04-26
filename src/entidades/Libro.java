@@ -18,7 +18,10 @@ public class Libro {
     private int CopiasDisponibles;
     private String editorial;
     private String isbn; //codigo que identifica al libro a nivel mundial
-
+    
+    public Libro() {
+        this("NI","NC","NT","NA","NC",0,0,"NE","NI");
+    }
     public Libro(String id, String codigo, String titulo, String autor, String categoria, int anioPublicacion, int CopiasDisponibles, String editorial, String isbn) {
         this.id = id;
         this.codigo = codigo;

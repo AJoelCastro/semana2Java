@@ -14,19 +14,23 @@ public class PrestamoBibliotecario {
     private String fechaPrevista;
     private String fechaDevolucion;
     private String estadoLibro;
+    private Libro libro;
+    private Lector lector;
     private float multa = 0.0f;
     private int cantidadLibros = 0;
 
     public PrestamoBibliotecario() {
-        this("--/--/--", "--/--/--", "--/--/--", "NN");
+        this("--/--/--", "--/--/--", "--/--/--", "NN", new Libro(), new Lector());
     }
 
-    public PrestamoBibliotecario(String fechaPrestamo, String fechaPrevista, 
-            String fechaDevolucion, String estadoLibro) {
+    public PrestamoBibliotecario(String fechaPrestamo, String fechaPrevista,
+            String fechaDevolucion, String estadoLibro, Libro libro, Lector lector) {
         this.fechaDevolucion = fechaDevolucion;
         this.fechaPrestamo = fechaPrestamo;
         this.fechaPrevista = fechaPrevista;
         this.estadoLibro = estadoLibro;
+        this.lector = lector;
+        this.libro = libro;
     }
 
     public String getFechaPrestamo() {
@@ -77,13 +81,35 @@ public class PrestamoBibliotecario {
         this.cantidadLibros = cantidad;
     }
 
+    public Libro getLibro() {
+        return libro;
+    }
+
+    public void setLibro(Libro libro) {
+        this.libro = libro;
+    }
+
+    public Lector getLector() {
+        return lector;
+    }
+
+    public void setLector(Lector lector) {
+        this.lector = lector;
+    }
+
     @Override
     public String toString() {
-        return "Fecha de Prestamo: " + getFechaPrestamo()
+        return "Nombre del libro: " + libro.getTitulo()
+                + "Codigo del libro: " + libro.getCodigo()
+                + "Fecha de Prestamo: " + getFechaPrestamo()
                 + "Fecha prevista: " + getFechaPrevista()
                 + "Fecha de devolucion: " + getFechaDevolucion()
                 + "Estado del Libro: " + getEstadoLibro()
                 + "Multa a pagar: " + getMulta()
-                + "Cantidad de Libros: " + getCantidadLibros();
+                + "Cantidad de Libros: " + getCantidadLibros()
+                + "Nombres del lector: " + lector.getNombre()
+                + "Apelidos del lector: " + lector.getApellido()
+                + "Codigo del lector: " + lector.getId();
     }
 }
+

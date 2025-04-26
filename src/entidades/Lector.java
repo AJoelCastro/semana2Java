@@ -14,7 +14,10 @@ public class Lector extends Persona {
     private String direccion;
     private boolean activo;  //control de acceso del usuario al sistemam por infracciones que pueda haber cometido(no devolucion/daño de libros)
     private int limitePrestamos; //limite de libros que puede ser prestados a la ves
-
+    
+    public Lector () {
+        this("NI","NT","ND",false,0,"NN","NA","NC","NT");
+    }
     public Lector(String id, String tipo, String direccion, boolean activo, int limitePrestamos, String nombre, String apellido, String correo, String telefono) {
         super(nombre, apellido, correo, telefono);
         this.id = id;

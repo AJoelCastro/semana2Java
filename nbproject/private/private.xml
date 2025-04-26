@@ -3,11 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/sanar/Desktop/Programacion/Java/POO%20II/Proyecto02/semana2Java/src/presentacion/FrmPrincipal.java</file>
-            <file>file:/C:/Users/sanar/Desktop/Programacion/Java/POO%20II/Proyecto02/semana2Java/src/presentacion/panLibros.java</file>
-            <file>file:/C:/Users/sanar/Desktop/Programacion/Java/POO%20II/Proyecto02/semana2Java/src/presentacion/panPrestamos.java</file>
-            <file>file:/C:/Users/sanar/Desktop/Programacion/Java/POO%20II/Proyecto02/semana2Java/src/presentacion/panInicio.java</file>
-            <file>file:/C:/Users/sanar/Desktop/Programacion/Java/POO%20II/Proyecto02/semana2Java/src/presentacion/panPrestamo.java</file>
+            <file>file:/D:/POO%20II/semana2Java/src/datos/HistorialPrestamos.java</file>
+            <file>file:/D:/POO%20II/semana2Java/src/entidades/PrestamoBibliotecario.java</file>
+            <file>file:/D:/POO%20II/semana2Java/src/entidades/Libro.java</file>
+            <file>file:/D:/POO%20II/semana2Java/src/entidades/Persona.java</file>
         </group>
     </open-files>
 </project-private>
