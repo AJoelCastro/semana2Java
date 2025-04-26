@@ -33,6 +33,7 @@ public class HistorialPrestamos {
         try (RandomAccessFile raf = new RandomAccessFile(archivo, "r")) {
             while (raf.getFilePointer() < raf.length()) {
                 // Leer datos del archivo en el mismo orden que fueron guardados
+                int idPrestamo = raf.readInt();
                 String titulo = raf.readUTF();
                 String autor = raf.readUTF();
                 int copiasDisponibles = raf.readInt();
@@ -47,9 +48,9 @@ public class HistorialPrestamos {
                 libro.setCopiasDisponibles(copiasDisponibles);
 
                 Lector lector = new Lector();
-                lector.setNombre(nombreLector);
+                lector = buscarPrestamo(idPrestamo);
 
-                PrestamoBibliotecario prestamo = new PrestamoBibliotecario(
+                PrestamoBibliotecario prestamo = new PrestamoBibliotecario(idPrestamo,
                         fechaPrestamo, fechaPrevista, "--/--/--", estadoLibro, libro, lector
                 );
 
@@ -60,7 +61,18 @@ public class HistorialPrestamos {
         }
         return historialPrestamos;
     }
-
+    
+    public Lector buscarPrestamo(int idPrestamo) {
+        Lector lec = new Lector();
+        ArrayList<PrestamoBibliotecario> lista = leerIngresos();
+        for (PrestamoBibliotecario prestamo : lista) {
+            if(idPrestamo == prestamo.getIdPrestamo()){
+                lec = prestamo.getLector();
+            }
+        }
+        return lec;
+    }
+    
     public void aniadirPrestamo(PrestamoBibliotecario prestamo) {
         try (RandomAccessFile raf = new RandomAccessFile(nombreArchivo, "rw")) {
             raf.seek(raf.length()); // Moverse al final del archivo
@@ -98,7 +110,7 @@ public class HistorialPrestamos {
     public DefaultTableModel getContenido() {
         DefaultTableModel modelo = new DefaultTableModel();
         String[] columnas = {
-            "Titulo Libro", "Autor", "Copias Disponibles",
+            "Titulo Libro", "Autor", "Id Prestamo", "Copias Disponibles",
             "Nombre Lector", "Fecha-Prestamo", "Fecha-Prevista","Estado"
         };
         modelo.setColumnIdentifiers(columnas); // Establecer nombres de columnas
@@ -108,11 +120,12 @@ public class HistorialPrestamos {
             Object[] fila = new Object[columnas.length];
             fila[0] = prestamo.getLibro().getTitulo();
             fila[1] = prestamo.getLibro().getAutor();
-            fila[2] = prestamo.getLibro().getCopiasDisponibles();
-            fila[3] = prestamo.getLector().getNombre();
-            fila[4] = prestamo.getFechaPrestamo();
-            fila[5] = prestamo.getFechaPrevista();
-            fila[6] = prestamo.getEstadoLibro();
+            fila[2] = prestamo.getIdPrestamo();
+            fila[3] = prestamo.getLibro().getCopiasDisponibles();
+            fila[4] = prestamo.getLector().getNombre();
+            fila[5] = prestamo.getFechaPrestamo();
+            fila[6] = prestamo.getFechaPrevista();
+            fila[7] = prestamo.getEstadoLibro();
             modelo.addRow(fila); // Agregar fila al modelo de la tabla
         }
 

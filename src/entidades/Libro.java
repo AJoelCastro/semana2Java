@@ -83,6 +83,14 @@ public class Libro {
         this.CopiasDisponibles = CopiasDisponibles;
     }
 
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
+    }
+
+    public void setAutor(String autor) {
+        this.autor = autor;
+    }
+
 
     @Override
     public String toString() {

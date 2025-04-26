@@ -42,11 +42,15 @@ public class Lector extends Persona {
     public boolean isActivo() {
         return activo;
     }
-
+    
     public int getLimitePrestamos() {
         return limitePrestamos;
     }
 
+    public int getTamaño() {
+        return getApellido().length() * 2 + getNombre().length() * 2 + 4 + 4;
+    }
+    
     public void setTipo(String tipo) {
         this.tipo = tipo;
     }

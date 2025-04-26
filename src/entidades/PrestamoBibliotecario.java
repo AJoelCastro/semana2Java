@@ -9,7 +9,7 @@ package entidades;
  * @author Administrador
  */
 public class PrestamoBibliotecario {
-
+    private int idPrestamo;
     private String fechaPrestamo;
     private String fechaPrevista;
     private String fechaDevolucion;
@@ -20,10 +20,10 @@ public class PrestamoBibliotecario {
     private int cantidadLibros = 0;
 
     public PrestamoBibliotecario() {
-        this("--/--/--", "--/--/--", "--/--/--", "NN", new Libro(), new Lector());
+        this(0,"--/--/--", "--/--/--", "--/--/--", "NN", new Libro(), new Lector());
     }
 
-    public PrestamoBibliotecario(String fechaPrestamo, String fechaPrevista,
+    public PrestamoBibliotecario(int idPrestamo,String fechaPrestamo, String fechaPrevista,
             String fechaDevolucion, String estadoLibro, Libro libro, Lector lector) {
         this.fechaDevolucion = fechaDevolucion;
         this.fechaPrestamo = fechaPrestamo;
@@ -31,6 +31,14 @@ public class PrestamoBibliotecario {
         this.estadoLibro = estadoLibro;
         this.lector = lector;
         this.libro = libro;
+    }
+
+    public int getIdPrestamo() {
+        return idPrestamo;
+    }
+
+    public void setIdPrestamo(int idPrestamo) {
+        this.idPrestamo = idPrestamo;
     }
 
     public String getFechaPrestamo() {
