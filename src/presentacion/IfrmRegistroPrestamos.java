@@ -274,48 +274,45 @@ public class IfrmRegistroPrestamos extends javax.swing.JInternalFrame {
         String dni = txtDni.getText();
         String correo = txtCorreo.getText();
         String direccion = txtDireccion.getText();
+
         // Validar que todos los campos estén completos
         if(id.isEmpty() || fechaPrevista.isEmpty() || codigoLibro.isEmpty() || nombre.isEmpty() || apellido.isEmpty() || telefono.isEmpty() || dni.isEmpty() || correo.isEmpty() || direccion.isEmpty()){
             JOptionPane.showMessageDialog(null, "Por favor complete todos los campos.");
         } else {
             try {
-                // Convertir los campos de texto a los tipos adecuados
                 int Dni = Integer.parseInt(dni);
                 int Id = Integer.parseInt(id);
 
-                // Crear un nuevo usuario y libro
                 Usuario nuevoUsuario = new Usuario(nombre, apellido, Dni, correo, telefono, direccion);
-                ListaLibros listaLibros = new ListaLibros();
-                Libro nuevoLibro = listaLibros.buscarPorCodigo(codigoLibro);
 
-                // Verificar si el código de libro ya existe
-                if (nuevoLibro == null) {
+                ListaLibros listaLibros = new ListaLibros();
+
+                ArrayList<Libro> librosEncontrados = listaLibros.buscarPorCodigo(codigoLibro);
+
+                if (librosEncontrados.isEmpty()) {
                     JOptionPane.showMessageDialog(null, "El código de libro no existe.");
                     return; // Salir del método si el código de libro no es válido
                 }
 
-                // Verificar si el ID de préstamo ya existe en el historial de préstamos
+                Libro nuevoLibro = librosEncontrados.get(0);
+
                 HistorialPrestamos historialPrestamos = new HistorialPrestamos();
-                
-                // Si pasa las validaciones, crear el préstamo
-                PrestamoBibliotecario nuevoPrestamo = new PrestamoBibliotecario(Id, fechaPrevista, nuevoLibro, nuevoUsuario);
                 ArrayList<PrestamoBibliotecario> lista = historialPrestamos.leerIngresos();
-                System.out.println("lista en frame"+lista);
+
                 for (PrestamoBibliotecario prestamo1 : lista) {
-                    if (prestamo1.getIdPrestamo() == nuevoPrestamo.getIdPrestamo()) {
+                    if (prestamo1.getIdPrestamo() == Id) {  // Verifica el ID de préstamo
                         JOptionPane.showMessageDialog(null, "El ID de préstamo ya existe. Por favor, elija otro.");
                         return;
                     }
                 }
 
-                // Añadir el préstamo al historial
+                PrestamoBibliotecario nuevoPrestamo = new PrestamoBibliotecario(Id, fechaPrevista, nuevoLibro, nuevoUsuario);
+
                 historialPrestamos.aniadirPrestamo(nuevoPrestamo);
                 JOptionPane.showMessageDialog(null, "Préstamo registrado correctamente.");
             } catch (NumberFormatException e) {
-                // Si ocurre un error al convertir los números, mostrar un mensaje
                 JOptionPane.showMessageDialog(null, "Error: Año de publicación o Copias no son válidos.");
             } catch (IOException e) {
-                // Manejar cualquier excepción de I/O al guardar el libro
                 JOptionPane.showMessageDialog(null, "Error al guardar el préstamo: " + e.getMessage());
             }
         }

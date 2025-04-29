@@ -10,6 +10,7 @@ import java.awt.*;
 import datos.*;
 import entidades.*;
 import java.io.IOException;
+import java.util.ArrayList;
 import javax.swing.table.DefaultTableModel;
 
 
@@ -266,7 +267,88 @@ public class panPrestamos extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        
+        String textoBusqueda = jTextField1.getText().trim();
+
+        if (textoBusqueda.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Por favor, ingrese un término de búsqueda.");
+            return;
+        }
+
+        HistorialPrestamos historial = new HistorialPrestamos();
+        DefaultTableModel modelo = new DefaultTableModel();
+
+        String[] columnas = {
+            "Libro", "Autor", "Id Prestamo", "Usuario", "Correo", "Telefono", "Fecha-Prestamo", "Fecha-Prevista"
+        };
+        modelo.setColumnIdentifiers(columnas);
+
+        if (jRadioButton1.isSelected()) { // Buscar por título de libro
+            ArrayList<PrestamoBibliotecario> prestamos = historial.buscarPrestamoPorLibro(textoBusqueda);
+            if (!prestamos.isEmpty()) {
+                for (PrestamoBibliotecario prestamo : prestamos) {
+                    Object[] fila = new Object[columnas.length];
+                    fila[0] = prestamo.getLibro().getTitulo();
+                    fila[1] = prestamo.getLibro().getAutor();
+                    fila[2] = prestamo.getIdPrestamo();
+                    fila[3] = prestamo.getUsuario().getNombre();
+                    fila[4] = prestamo.getUsuario().getCorreo();
+                    fila[5] = prestamo.getUsuario().getTelefono();
+                    fila[6] = prestamo.getFechaPrestamo();
+                    fila[7] = prestamo.getFechaPrevista();
+                    modelo.addRow(fila);
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "No se encontró un libro con ese título.");
+            }
+        } else if (jRadioButton2.isSelected()) {
+            try {
+                int dni = Integer.parseInt(textoBusqueda);
+                ArrayList<PrestamoBibliotecario> prestamos = historial.buscarPrestamoPorIdLector(dni);
+                if (!prestamos.isEmpty()) {
+                    for (PrestamoBibliotecario prestamo : prestamos) {
+                        Object[] fila = new Object[columnas.length];
+                        fila[0] = prestamo.getLibro().getTitulo();
+                        fila[1] = prestamo.getLibro().getAutor();
+                        fila[2] = prestamo.getIdPrestamo();
+                        fila[3] = prestamo.getUsuario().getNombre();
+                        fila[4] = prestamo.getUsuario().getCorreo();
+                        fila[5] = prestamo.getUsuario().getTelefono();
+                        fila[6] = prestamo.getFechaPrestamo();
+                        fila[7] = prestamo.getFechaPrevista();
+                        modelo.addRow(fila);
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(this, "No se encontró un lector con ese DNI.");
+                }
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(this, "Por favor, ingrese un DNI válido.");
+            }
+        } else if (jRadioButton3.isSelected()) {
+            try {
+                int idPrestamo = Integer.parseInt(textoBusqueda);
+                PrestamoBibliotecario prestamo = historial.buscarPrestamoTotal(idPrestamo);
+                if (prestamo != null) {
+                    Object[] fila = new Object[columnas.length];
+                    fila[0] = prestamo.getLibro().getTitulo();
+                    fila[1] = prestamo.getLibro().getAutor();
+                    fila[2] = prestamo.getIdPrestamo();
+                    fila[3] = prestamo.getUsuario().getNombre();
+                    fila[4] = prestamo.getUsuario().getCorreo();
+                    fila[5] = prestamo.getUsuario().getTelefono();
+                    fila[6] = prestamo.getFechaPrestamo();
+                    fila[7] = prestamo.getFechaPrevista();
+                    modelo.addRow(fila);
+                } else {
+                    JOptionPane.showMessageDialog(this, "No se encontró un préstamo con ese ID.");
+                }
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(this, "Por favor, ingrese un ID válido.");
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Seleccione un criterio de búsqueda.");
+        }
+
+        tblPrestamos.setModel(modelo);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -326,10 +408,8 @@ public class panPrestamos extends javax.swing.JPanel {
         modelo = historialPrestamos.getContenido();
         if (modelo != null) {
             tblPrestamos.setModel(modelo);
-            // Asignar el modelo a la tabla gráfica (tblHistorial) para mostrar los datos
         } else {
         JOptionPane.showMessageDialog(this, "No hay profesores registrados");
-        // Mostrar un mensaje si no hay datos para cargar
         }
     }//GEN-LAST:event_jButton4ActionPerformed
 

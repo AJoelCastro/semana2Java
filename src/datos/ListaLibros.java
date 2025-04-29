@@ -3,20 +3,15 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package datos;
+
 import entidades.Libro;
-import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.util.ArrayList;
 import javax.swing.JOptionPane;
-
-/**
- *
- * @author USUARIO
- */
 
 public class ListaLibros {
     private static RandomAccessFile archivo;
-
     public static void inicializarArchivo() {
         try {
             if (archivo == null) {
@@ -34,7 +29,7 @@ public class ListaLibros {
     public static void escribir(Libro libro) throws IOException {
         inicializarArchivo();
         archivo.seek(archivo.length()); 
-
+        
         archivo.writeUTF(libro.getCodigo());
         archivo.writeUTF(libro.getTitulo());
         archivo.writeUTF(libro.getAutor());
@@ -44,12 +39,11 @@ public class ListaLibros {
         archivo.writeUTF(libro.getEditorial());
     }
 
-
-    public static void listarTodos(javax.swing.table.DefaultTableModel modelo) throws IOException {
+    public static ArrayList<Libro> listarTodos() throws IOException {
         inicializarArchivo();
         archivo.seek(0);
 
-        modelo.setRowCount(0); 
+        ArrayList<Libro> libros = new ArrayList<>();
 
         while (archivo.getFilePointer() < archivo.length()) {
             String codigo = archivo.readUTF();
@@ -60,17 +54,17 @@ public class ListaLibros {
             int copiasDisponibles = archivo.readInt();
             String editorial = archivo.readUTF();
 
-            modelo.addRow(new Object[]{codigo, titulo, autor, categoria, anioPublicacion, copiasDisponibles, editorial});
+            libros.add(new Libro(codigo, titulo, autor, categoria, anioPublicacion, copiasDisponibles, editorial));
         }
+        return libros;
     }
 
-
-    public static void buscarPorAutor(javax.swing.table.DefaultTableModel modelo, String autorBuscado) throws IOException {
+    public static ArrayList<Libro> buscarPorAutor(String autorBuscado) throws IOException {
         inicializarArchivo();
         archivo.seek(0);
 
-        modelo.setRowCount(0);
-
+        ArrayList<Libro> librosEncontrados = new ArrayList<>();
+        
         while (archivo.getFilePointer() < archivo.length()) {
             String codigo = archivo.readUTF();
             String titulo = archivo.readUTF();
@@ -81,17 +75,18 @@ public class ListaLibros {
             String editorial = archivo.readUTF();
 
             if (autor.equalsIgnoreCase(autorBuscado)) {
-                modelo.addRow(new Object[]{codigo, titulo, autor, categoria, anioPublicacion, copiasDisponibles, editorial});
+                librosEncontrados.add(new Libro(codigo, titulo, autor, categoria, anioPublicacion, copiasDisponibles, editorial));
             }
         }
+        return librosEncontrados;
     }
 
-    public static void buscarPorTitulo(javax.swing.table.DefaultTableModel modelo, String tituloBuscado) throws IOException {
+    public static ArrayList<Libro> buscarPorTitulo(String tituloBuscado) throws IOException {
         inicializarArchivo();
         archivo.seek(0);
 
-        modelo.setRowCount(0);
-
+        ArrayList<Libro> librosEncontrados = new ArrayList<>();
+        
         while (archivo.getFilePointer() < archivo.length()) {
             String codigo = archivo.readUTF();
             String titulo = archivo.readUTF();
@@ -102,16 +97,18 @@ public class ListaLibros {
             String editorial = archivo.readUTF();
 
             if (titulo.equalsIgnoreCase(tituloBuscado)) {
-                modelo.addRow(new Object[]{codigo, titulo, autor, categoria, anioPublicacion, copiasDisponibles, editorial});
+                librosEncontrados.add(new Libro(codigo, titulo, autor, categoria, anioPublicacion, copiasDisponibles, editorial));
             }
         }
+        return librosEncontrados;
     }
 
-    public static Libro buscarPorCodigo(String codigoBuscado) throws IOException {
+    public static ArrayList<Libro> buscarPorCodigo(String codigoBuscado) throws IOException {
         inicializarArchivo();
         archivo.seek(0);
 
-        // Recorrer el archivo hasta encontrar el libro con el código buscado
+        ArrayList<Libro> librosEncontrados = new ArrayList<>();
+        
         while (archivo.getFilePointer() < archivo.length()) {
             String codigo = archivo.readUTF();
             String titulo = archivo.readUTF();
@@ -121,21 +118,19 @@ public class ListaLibros {
             int copiasDisponibles = archivo.readInt();
             String editorial = archivo.readUTF();
 
-            // Si el código coincide, devolver el objeto Libro
             if (codigo.equalsIgnoreCase(codigoBuscado)) {
-                return new Libro(codigo, titulo, autor, categoria, anioPublicacion, copiasDisponibles, editorial);
+                librosEncontrados.add(new Libro(codigo, titulo, autor, categoria, anioPublicacion, copiasDisponibles, editorial));
             }
         }
-
-        return null;  // Si no se encuentra el libro con el código dado, devolver null
+        return librosEncontrados;
     }
 
-    public static void buscarPorCategoria(javax.swing.table.DefaultTableModel modelo, String categoriaBuscada) throws IOException {
+    public static ArrayList<Libro> buscarPorCategoria(String categoriaBuscada) throws IOException {
         inicializarArchivo();
         archivo.seek(0);
 
-        modelo.setRowCount(0);
-
+        ArrayList<Libro> librosEncontrados = new ArrayList<>();
+        
         while (archivo.getFilePointer() < archivo.length()) {
             String codigo = archivo.readUTF();
             String titulo = archivo.readUTF();
@@ -146,11 +141,13 @@ public class ListaLibros {
             String editorial = archivo.readUTF();
 
             if (categoria.equalsIgnoreCase(categoriaBuscada)) {
-                modelo.addRow(new Object[]{codigo, titulo, autor, categoria, anioPublicacion, copiasDisponibles, editorial});
+                librosEncontrados.add(new Libro(codigo, titulo, autor, categoria, anioPublicacion, copiasDisponibles, editorial));
             }
         }
+        return librosEncontrados;
     }
-    public static void eliminarLibro(String idBuscado) throws IOException {
+
+    public static void eliminarLibro(String codigoBuscado) throws IOException {
         inicializarArchivo();
 
         RandomAccessFile temp = new RandomAccessFile("Temp.dat", "rw");
@@ -165,7 +162,7 @@ public class ListaLibros {
             int copiasDisponibles = archivo.readInt();
             String editorial = archivo.readUTF();
 
-            if (!codigo.equalsIgnoreCase(idBuscado)) {
+            if (!codigo.equalsIgnoreCase(codigoBuscado)) {
                 temp.writeUTF(codigo);
                 temp.writeUTF(titulo);
                 temp.writeUTF(autor);
@@ -186,11 +183,10 @@ public class ListaLibros {
             temporal.renameTo(original);
         }
 
-        archivo = new RandomAccessFile("Libro.dat", "rw");
+        archivo = new RandomAccessFile("Libro.dat", "rw"); 
     }
-    
-    
-    public static void editarLibro(String idBuscado, Libro nuevoLibro) throws IOException {
+
+    public static void editarLibro(String codigoBuscado, Libro nuevoLibro) throws IOException {
         inicializarArchivo();
 
         RandomAccessFile temp = new RandomAccessFile("Temp.dat", "rw");
@@ -205,8 +201,7 @@ public class ListaLibros {
             int copiasDisponibles = archivo.readInt();
             String editorial = archivo.readUTF();
 
-            if (codigo.equalsIgnoreCase(idBuscado)) {
-                
+            if (codigo.equalsIgnoreCase(codigoBuscado)) {
                 temp.writeUTF(nuevoLibro.getCodigo());
                 temp.writeUTF(nuevoLibro.getTitulo());
                 temp.writeUTF(nuevoLibro.getAutor());
@@ -215,7 +210,6 @@ public class ListaLibros {
                 temp.writeInt(nuevoLibro.getCopiasDisponibles());
                 temp.writeUTF(nuevoLibro.getEditorial());
             } else {
-                
                 temp.writeUTF(codigo);
                 temp.writeUTF(titulo);
                 temp.writeUTF(autor);
@@ -239,6 +233,3 @@ public class ListaLibros {
         archivo = new RandomAccessFile("Libro.dat", "rw"); 
     }
 }
-
-
-

@@ -9,7 +9,7 @@ package entidades;
  * @author Asus
  */
 public class Libro {
-    private String codigo; //codigo de libro(interno en la biblioteca)
+    private String codigo;
     private String titulo;
     private String autor;
     private String categoria;

@@ -4,21 +4,22 @@
  */
 package presentacion;
 
-import javax.swing.*;
-import datos.*;
-import entidades.*;
+import datos.ListaLibros;
+import entidades.Libro;
 import java.io.IOException;
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
 
 /**
  *
- * @author ArcosArce
+ * @author Asus
  */
-public class IfrmRegistroLibros extends javax.swing.JInternalFrame {
+public class IfrmLibros extends javax.swing.JInternalFrame {
 
     /**
-     * Creates new form IfrmRegistroLibros
+     * Creates new form ifrmEditarLibro
      */
-    public IfrmRegistroLibros() {
+    public IfrmLibros() {
         initComponents();
     }
 
@@ -53,9 +54,7 @@ public class IfrmRegistroLibros extends javax.swing.JInternalFrame {
         jSeparator6 = new javax.swing.JSeparator();
         jSeparator7 = new javax.swing.JSeparator();
         jSeparator8 = new javax.swing.JSeparator();
-        btnGuardar = new javax.swing.JToggleButton();
-
-        setClosable(true);
+        btnEditar = new javax.swing.JToggleButton();
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -94,10 +93,10 @@ public class IfrmRegistroLibros extends javax.swing.JInternalFrame {
         txtEditorial.setBorder(null);
         txtEditorial.setPreferredSize(new java.awt.Dimension(64, 20));
 
-        btnGuardar.setText("Guardar");
-        btnGuardar.addActionListener(new java.awt.event.ActionListener() {
+        btnEditar.setText("Editar");
+        btnEditar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnGuardarActionPerformed(evt);
+                btnEditarActionPerformed(evt);
             }
         });
 
@@ -109,7 +108,7 @@ public class IfrmRegistroLibros extends javax.swing.JInternalFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(55, 55, 55)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -143,7 +142,7 @@ public class IfrmRegistroLibros extends javax.swing.JInternalFrame {
                                     .addComponent(jSeparator6)
                                     .addComponent(jSeparator7)
                                     .addComponent(jSeparator8))))))
-                .addContainerGap(73, Short.MAX_VALUE))
+                .addContainerGap(26, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -191,8 +190,8 @@ public class IfrmRegistroLibros extends javax.swing.JInternalFrame {
                 .addGap(0, 0, 0)
                 .addComponent(jSeparator8, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(64, 64, 64)
-                .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(39, Short.MAX_VALUE))
+                .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -209,39 +208,48 @@ public class IfrmRegistroLibros extends javax.swing.JInternalFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-        // Obtener los datos de los campos de texto
-        String codigo = txtCodigo.getText();
-        String titulo = txtTitulo.getText();
-        String autor = txtAutor.getText();
-        String categoria = txtCategoria.getText();
-        String publicacion = txtPublicacion.getText();
-        String copias = txtCopias.getText();
-        String editorial = txtEditorial.getText();
-        
-        if (codigo.isEmpty() || titulo.isEmpty() || autor.isEmpty() || categoria.isEmpty() || 
-            publicacion.isEmpty() || copias.isEmpty() || editorial.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Por favor complete todos los campos.");
+    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
+        String codigoLibro = txtCodigo.getText();
+        String nuevoTitulo = txtTitulo.getText();
+        String nuevoAutor = txtAutor.getText();
+        String nuevaCategoria = txtCategoria.getText();
+        String nuevoAnio = txtPublicacion.getText();
+        String nuevasCopias = txtCopias.getText();
+        String nuevaEditorial = txtEditorial.getText();
+
+        if (codigoLibro.isEmpty() || nuevoTitulo.isEmpty() || nuevoAutor.isEmpty() || nuevaCategoria.isEmpty() || nuevoAnio.isEmpty() || nuevasCopias.isEmpty() || nuevaEditorial.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Por favor complete todos los campos.", "Error", JOptionPane.ERROR_MESSAGE);
         } else {
             try {
-                int anioPublicacion = Integer.parseInt(publicacion);
-                int copiasDisponibles = Integer.parseInt(copias);
-                
-                Libro nuevoLibro = new Libro(codigo, titulo, autor, categoria, anioPublicacion, copiasDisponibles, editorial);
-                
-                ListaLibros.escribir(nuevoLibro);
-                JOptionPane.showMessageDialog(null, "Libro registrado correctamente.");
+                int anio = Integer.parseInt(nuevoAnio);
+                int copias = Integer.parseInt(nuevasCopias);
+
+                ArrayList<Libro> librosEncontrados = ListaLibros.buscarPorCodigo(codigoLibro);
+
+                if (librosEncontrados.isEmpty()) {
+                    JOptionPane.showMessageDialog(this, "El código de libro no existe.", "Error", JOptionPane.ERROR_MESSAGE);
+                    return; 
+                }
+
+                Libro libro = librosEncontrados.get(0);
+
+                Libro libroActualizado = new Libro(codigoLibro, nuevoTitulo, nuevoAutor, nuevaCategoria, anio, copias, nuevaEditorial);
+                ListaLibros.editarLibro(codigoLibro, libroActualizado);
+
+                JOptionPane.showMessageDialog(this, "Libro actualizado correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                this.dispose();
+
             } catch (NumberFormatException e) {
-                JOptionPane.showMessageDialog(null, "Error: Año de publicación o Copias no son válidos.");
+                JOptionPane.showMessageDialog(this, "Error: Año de publicación o Copias no son válidos.", "Error", JOptionPane.ERROR_MESSAGE);
             } catch (IOException e) {
-                JOptionPane.showMessageDialog(null, "Error al guardar el libro: " + e.getMessage());
+                JOptionPane.showMessageDialog(this, "Error al guardar los datos: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
-    }//GEN-LAST:event_btnGuardarActionPerformed
+    }//GEN-LAST:event_btnEditarActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JToggleButton btnGuardar;
+    private javax.swing.JToggleButton btnEditar;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
