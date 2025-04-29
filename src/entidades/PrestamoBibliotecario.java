@@ -104,7 +104,7 @@ public class PrestamoBibliotecario {
     public void setLector(Lector lector) {
         this.lector = lector;
     }
-
+    
     @Override
     public String toString() {
         return "Nombre del libro: " + libro.getTitulo()

@@ -4,6 +4,7 @@
  */
 package datos;
 import entidades.Libro;
+import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import javax.swing.JOptionPane;
@@ -34,7 +35,6 @@ public class ListaLibros {
         inicializarArchivo();
         archivo.seek(archivo.length()); 
 
-        archivo.writeUTF(libro.getId());
         archivo.writeUTF(libro.getCodigo());
         archivo.writeUTF(libro.getTitulo());
         archivo.writeUTF(libro.getAutor());
@@ -42,7 +42,6 @@ public class ListaLibros {
         archivo.writeInt(libro.getAnioPublicacion());
         archivo.writeInt(libro.getCopiasDisponibles());
         archivo.writeUTF(libro.getEditorial());
-        archivo.writeUTF(libro.getIsbn());
     }
 
 
@@ -53,7 +52,6 @@ public class ListaLibros {
         modelo.setRowCount(0); 
 
         while (archivo.getFilePointer() < archivo.length()) {
-            String id = archivo.readUTF();
             String codigo = archivo.readUTF();
             String titulo = archivo.readUTF();
             String autor = archivo.readUTF();
@@ -61,9 +59,8 @@ public class ListaLibros {
             int anioPublicacion = archivo.readInt();
             int copiasDisponibles = archivo.readInt();
             String editorial = archivo.readUTF();
-            String isbn = archivo.readUTF();
 
-            modelo.addRow(new Object[]{id, codigo, titulo, autor, categoria, anioPublicacion, copiasDisponibles, editorial, isbn});
+            modelo.addRow(new Object[]{codigo, titulo, autor, categoria, anioPublicacion, copiasDisponibles, editorial});
         }
     }
 
@@ -75,7 +72,6 @@ public class ListaLibros {
         modelo.setRowCount(0);
 
         while (archivo.getFilePointer() < archivo.length()) {
-            String id = archivo.readUTF();
             String codigo = archivo.readUTF();
             String titulo = archivo.readUTF();
             String autor = archivo.readUTF();
@@ -83,10 +79,9 @@ public class ListaLibros {
             int anioPublicacion = archivo.readInt();
             int copiasDisponibles = archivo.readInt();
             String editorial = archivo.readUTF();
-            String isbn = archivo.readUTF();
 
             if (autor.equalsIgnoreCase(autorBuscado)) {
-                modelo.addRow(new Object[]{id, codigo, titulo, autor, categoria, anioPublicacion, copiasDisponibles, editorial, isbn});
+                modelo.addRow(new Object[]{codigo, titulo, autor, categoria, anioPublicacion, copiasDisponibles, editorial});
             }
         }
     }
@@ -98,7 +93,6 @@ public class ListaLibros {
         modelo.setRowCount(0);
 
         while (archivo.getFilePointer() < archivo.length()) {
-            String id = archivo.readUTF();
             String codigo = archivo.readUTF();
             String titulo = archivo.readUTF();
             String autor = archivo.readUTF();
@@ -106,22 +100,19 @@ public class ListaLibros {
             int anioPublicacion = archivo.readInt();
             int copiasDisponibles = archivo.readInt();
             String editorial = archivo.readUTF();
-            String isbn = archivo.readUTF();
 
             if (titulo.equalsIgnoreCase(tituloBuscado)) {
-                modelo.addRow(new Object[]{id, codigo, titulo, autor, categoria, anioPublicacion, copiasDisponibles, editorial, isbn});
+                modelo.addRow(new Object[]{codigo, titulo, autor, categoria, anioPublicacion, copiasDisponibles, editorial});
             }
         }
     }
 
-    public static void buscarPorCodigo(javax.swing.table.DefaultTableModel modelo, String codigoBuscado) throws IOException {
+    public static Libro buscarPorCodigo(String codigoBuscado) throws IOException {
         inicializarArchivo();
         archivo.seek(0);
 
-        modelo.setRowCount(0);
-
+        // Recorrer el archivo hasta encontrar el libro con el código buscado
         while (archivo.getFilePointer() < archivo.length()) {
-            String id = archivo.readUTF();
             String codigo = archivo.readUTF();
             String titulo = archivo.readUTF();
             String autor = archivo.readUTF();
@@ -129,12 +120,14 @@ public class ListaLibros {
             int anioPublicacion = archivo.readInt();
             int copiasDisponibles = archivo.readInt();
             String editorial = archivo.readUTF();
-            String isbn = archivo.readUTF();
 
+            // Si el código coincide, devolver el objeto Libro
             if (codigo.equalsIgnoreCase(codigoBuscado)) {
-                modelo.addRow(new Object[]{id, codigo, titulo, autor, categoria, anioPublicacion, copiasDisponibles, editorial, isbn});
+                return new Libro(codigo, titulo, autor, categoria, anioPublicacion, copiasDisponibles, editorial);
             }
         }
+
+        return null;  // Si no se encuentra el libro con el código dado, devolver null
     }
 
     public static void buscarPorCategoria(javax.swing.table.DefaultTableModel modelo, String categoriaBuscada) throws IOException {
@@ -144,7 +137,6 @@ public class ListaLibros {
         modelo.setRowCount(0);
 
         while (archivo.getFilePointer() < archivo.length()) {
-            String id = archivo.readUTF();
             String codigo = archivo.readUTF();
             String titulo = archivo.readUTF();
             String autor = archivo.readUTF();
@@ -152,108 +144,101 @@ public class ListaLibros {
             int anioPublicacion = archivo.readInt();
             int copiasDisponibles = archivo.readInt();
             String editorial = archivo.readUTF();
-            String isbn = archivo.readUTF();
 
             if (categoria.equalsIgnoreCase(categoriaBuscada)) {
-                modelo.addRow(new Object[]{id, codigo, titulo, autor, categoria, anioPublicacion, copiasDisponibles, editorial, isbn});
+                modelo.addRow(new Object[]{codigo, titulo, autor, categoria, anioPublicacion, copiasDisponibles, editorial});
             }
         }
     }
     public static void eliminarLibro(String idBuscado) throws IOException {
-    inicializarArchivo();
+        inicializarArchivo();
 
-    RandomAccessFile temp = new RandomAccessFile("Temp.dat", "rw");
-    archivo.seek(0);
+        RandomAccessFile temp = new RandomAccessFile("Temp.dat", "rw");
+        archivo.seek(0);
 
-    while (archivo.getFilePointer() < archivo.length()) {
-        String id = archivo.readUTF();
-        String codigo = archivo.readUTF();
-        String titulo = archivo.readUTF();
-        String autor = archivo.readUTF();
-        String categoria = archivo.readUTF();
-        int anioPublicacion = archivo.readInt();
-        int copiasDisponibles = archivo.readInt();
-        String editorial = archivo.readUTF();
-        String isbn = archivo.readUTF();
+        while (archivo.getFilePointer() < archivo.length()) {
+            String codigo = archivo.readUTF();
+            String titulo = archivo.readUTF();
+            String autor = archivo.readUTF();
+            String categoria = archivo.readUTF();
+            int anioPublicacion = archivo.readInt();
+            int copiasDisponibles = archivo.readInt();
+            String editorial = archivo.readUTF();
 
-        if (!id.equalsIgnoreCase(idBuscado)) {
-            temp.writeUTF(id);
-            temp.writeUTF(codigo);
-            temp.writeUTF(titulo);
-            temp.writeUTF(autor);
-            temp.writeUTF(categoria);
-            temp.writeInt(anioPublicacion);
-            temp.writeInt(copiasDisponibles);
-            temp.writeUTF(editorial);
-            temp.writeUTF(isbn);
+            if (!codigo.equalsIgnoreCase(idBuscado)) {
+                temp.writeUTF(codigo);
+                temp.writeUTF(titulo);
+                temp.writeUTF(autor);
+                temp.writeUTF(categoria);
+                temp.writeInt(anioPublicacion);
+                temp.writeInt(copiasDisponibles);
+                temp.writeUTF(editorial);
+            }
         }
+
+        archivo.close();
+        temp.close();
+
+        java.io.File original = new java.io.File("Libro.dat");
+        java.io.File temporal = new java.io.File("Temp.dat");
+
+        if (original.delete()) {
+            temporal.renameTo(original);
+        }
+
+        archivo = new RandomAccessFile("Libro.dat", "rw");
     }
-
-    archivo.close();
-    temp.close();
-
-    java.io.File original = new java.io.File("Libro.dat");
-    java.io.File temporal = new java.io.File("Temp.dat");
-
-    if (original.delete()) {
-        temporal.renameTo(original);
-    }
-
-    archivo = new RandomAccessFile("Libro.dat", "rw"); 
-    }
+    
+    
     public static void editarLibro(String idBuscado, Libro nuevoLibro) throws IOException {
-    inicializarArchivo();
+        inicializarArchivo();
 
-    RandomAccessFile temp = new RandomAccessFile("Temp.dat", "rw");
-    archivo.seek(0);
+        RandomAccessFile temp = new RandomAccessFile("Temp.dat", "rw");
+        archivo.seek(0);
 
-    while (archivo.getFilePointer() < archivo.length()) {
-        String id = archivo.readUTF();
-        String codigo = archivo.readUTF();
-        String titulo = archivo.readUTF();
-        String autor = archivo.readUTF();
-        String categoria = archivo.readUTF();
-        int anioPublicacion = archivo.readInt();
-        int copiasDisponibles = archivo.readInt();
-        String editorial = archivo.readUTF();
-        String isbn = archivo.readUTF();
+        while (archivo.getFilePointer() < archivo.length()) {
+            String codigo = archivo.readUTF();
+            String titulo = archivo.readUTF();
+            String autor = archivo.readUTF();
+            String categoria = archivo.readUTF();
+            int anioPublicacion = archivo.readInt();
+            int copiasDisponibles = archivo.readInt();
+            String editorial = archivo.readUTF();
 
-        if (id.equalsIgnoreCase(idBuscado)) {
-            
-            temp.writeUTF(nuevoLibro.getId());
-            temp.writeUTF(nuevoLibro.getCodigo());
-            temp.writeUTF(nuevoLibro.getTitulo());
-            temp.writeUTF(nuevoLibro.getAutor());
-            temp.writeUTF(nuevoLibro.getCategoria());
-            temp.writeInt(nuevoLibro.getAnioPublicacion());
-            temp.writeInt(nuevoLibro.getCopiasDisponibles());
-            temp.writeUTF(nuevoLibro.getEditorial());
-            temp.writeUTF(nuevoLibro.getIsbn());
-        } else {
-            
-            temp.writeUTF(id);
-            temp.writeUTF(codigo);
-            temp.writeUTF(titulo);
-            temp.writeUTF(autor);
-            temp.writeUTF(categoria);
-            temp.writeInt(anioPublicacion);
-            temp.writeInt(copiasDisponibles);
-            temp.writeUTF(editorial);
-            temp.writeUTF(isbn);
+            if (codigo.equalsIgnoreCase(idBuscado)) {
+                
+                temp.writeUTF(nuevoLibro.getCodigo());
+                temp.writeUTF(nuevoLibro.getTitulo());
+                temp.writeUTF(nuevoLibro.getAutor());
+                temp.writeUTF(nuevoLibro.getCategoria());
+                temp.writeInt(nuevoLibro.getAnioPublicacion());
+                temp.writeInt(nuevoLibro.getCopiasDisponibles());
+                temp.writeUTF(nuevoLibro.getEditorial());
+            } else {
+                
+                temp.writeUTF(codigo);
+                temp.writeUTF(titulo);
+                temp.writeUTF(autor);
+                temp.writeUTF(categoria);
+                temp.writeInt(anioPublicacion);
+                temp.writeInt(copiasDisponibles);
+                temp.writeUTF(editorial);
+            }
         }
+
+        archivo.close();
+        temp.close();
+
+        java.io.File original = new java.io.File("Libro.dat");
+        java.io.File temporal = new java.io.File("Temp.dat");
+
+        if (original.delete()) {
+            temporal.renameTo(original);
+        }
+
+        archivo = new RandomAccessFile("Libro.dat", "rw"); 
     }
-
-    archivo.close();
-    temp.close();
-
-    java.io.File original = new java.io.File("Libro.dat");
-    java.io.File temporal = new java.io.File("Temp.dat");
-
-    if (original.delete()) {
-        temporal.renameTo(original);
-    }
-
-    archivo = new RandomAccessFile("Libro.dat", "rw"); 
-    }
-
 }
+
+
+

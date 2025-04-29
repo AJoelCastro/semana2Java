@@ -67,6 +67,8 @@ public class HistorialPrestamos {
         }
         return lec;
     }
+    
+    
     public PrestamoBibliotecario buscarPrestamoTotal(int idPrestamo) {
         PrestamoBibliotecario prest = new PrestamoBibliotecario();
         ArrayList<PrestamoBibliotecario> lista = leerIngresos();
