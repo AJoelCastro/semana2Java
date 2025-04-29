@@ -274,7 +274,6 @@ public class IfrmRegistroPrestamos extends javax.swing.JInternalFrame {
         String dni = txtDni.getText();
         String correo = txtCorreo.getText();
         String direccion = txtDireccion.getText();
-
         // Validar que todos los campos estén completos
         if(id.isEmpty() || fechaPrevista.isEmpty() || codigoLibro.isEmpty() || nombre.isEmpty() || apellido.isEmpty() || telefono.isEmpty() || dni.isEmpty() || correo.isEmpty() || direccion.isEmpty()){
             JOptionPane.showMessageDialog(null, "Por favor complete todos los campos.");
@@ -301,6 +300,7 @@ public class IfrmRegistroPrestamos extends javax.swing.JInternalFrame {
                 // Si pasa las validaciones, crear el préstamo
                 PrestamoBibliotecario nuevoPrestamo = new PrestamoBibliotecario(Id, fechaPrevista, nuevoLibro, nuevoUsuario);
                 ArrayList<PrestamoBibliotecario> lista = historialPrestamos.leerIngresos();
+                System.out.println("lista en frame"+lista);
                 for (PrestamoBibliotecario prestamo1 : lista) {
                     if (prestamo1.getIdPrestamo() == nuevoPrestamo.getIdPrestamo()) {
                         JOptionPane.showMessageDialog(null, "El ID de préstamo ya existe. Por favor, elija otro.");

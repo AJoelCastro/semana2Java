@@ -276,8 +276,8 @@ public class panPrestamos extends javax.swing.JPanel {
         DefaultTableModel modelo = new DefaultTableModel();
 
         String[] columnas = {
-        "Titulo Libro", "Autor", "Id Prestamo", "Copias Disponibles",
-        "Usuario", "Telefono", "Fecha-Prestamo", "Fecha-Prevista","Estado"
+        "Libro", "Autor", "Id Prestamo",
+            "Usuario","Correo", "Telefono", "Fecha-Prestamo", "Fecha-Prevista"
         };
         modelo.setColumnIdentifiers(columnas);
 
