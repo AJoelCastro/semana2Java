@@ -4,7 +4,7 @@
  */
 package datos;
 
-import entidades.Lector;
+import entidades.Usuario;
 import entidades.Libro;
 import entidades.PrestamoBibliotecario;
 import java.io.File;
@@ -50,10 +50,10 @@ public class HistorialPrestamos {
                 String telefonoLector = raf.readUTF();
 
                 Libro libro = new Libro(codigo, titulo, autor, categoria, anio, copias, editorial);
-                Lector lector = new Lector(idLector, "Desconocido", "Sin dirección", true, 0, nombreLector, "NA", "NC", telefonoLector);
+                Usuario usuario = new Usuario("Desconocido", "Sin dirección", 0, "NA", "NC");
 
                 PrestamoBibliotecario prestamo = new PrestamoBibliotecario(idPrestamo,
-                    fechaPrestamo, fechaPrevista, "--/--/--", estadoLibro, libro, lector);
+                    fechaPrestamo, fechaPrevista, "--/--/--", estadoLibro, libro, usuario);
 
                 historialPrestamos.add(prestamo);
             }
@@ -63,15 +63,15 @@ public class HistorialPrestamos {
         return historialPrestamos;
     }
     
-    public Lector buscarPrestamoPorLector(int idPrestamo) {
-        Lector lec = new Lector();
+    public Usuario buscarPrestamoPorUsuario(int idPrestamo) {
+        Usuario user = new Usuario();
         ArrayList<PrestamoBibliotecario> lista = leerIngresos();
         for (PrestamoBibliotecario prestamo : lista) {
             if(idPrestamo == prestamo.getIdPrestamo()){
-                lec = prestamo.getLector();
+                user = prestamo.getUsuario();
             }
         }
-        return lec;
+        return user;
     }
     
     
@@ -97,11 +97,11 @@ public class HistorialPrestamos {
         return prest;
     }
     
-    public PrestamoBibliotecario buscarPrestamoPorIdLector(String idLector) {
+    public PrestamoBibliotecario buscarPrestamoPorIdLector(int dni) {
         PrestamoBibliotecario prest = new PrestamoBibliotecario();
         ArrayList<PrestamoBibliotecario> lista = leerIngresos();
         for (PrestamoBibliotecario prestamo : lista) {
-            if(idLector.equals(prestamo.getLector().getId())){
+            if(dni==prestamo.getUsuario().getDni()){
                 prest = prestamo;
             }
         }
@@ -132,9 +132,9 @@ public class HistorialPrestamos {
             raf.writeUTF(prestamo.getEstadoLibro());
             
             // Datos del lector
-            raf.writeUTF(prestamo.getLector().getId());
-            raf.writeUTF(prestamo.getLector().getNombre());
-            raf.writeUTF(prestamo.getLector().getTelefono());
+            raf.writeInt(prestamo.getUsuario().getDni());
+            raf.writeUTF(prestamo.getUsuario().getNombre());
+            raf.writeUTF(prestamo.getUsuario().getTelefono());
 
         } catch (IOException e) {
             System.out.println("Error al añadir préstamo: " + e.getMessage());
@@ -148,13 +148,13 @@ public class HistorialPrestamos {
         guardarHistorialCompleto(historialPrestamos);
     }
     
-    public void editarPrestamo(int idPrestamo, String newDatePrevista, Libro lib, Lector lec){
+    public void editarPrestamo(int idPrestamo, String newDatePrevista, Libro lib, Usuario user){
         PrestamoBibliotecario prest = buscarPrestamoTotal(idPrestamo);
         ArrayList<PrestamoBibliotecario> historialPrestamos = leerIngresos();
         if(historialPrestamos.contains(prest)){
             prest.setFechaPrevista(newDatePrevista);
             prest.setLibro(lib);
-            prest.setLector(lec);
+            prest.setUsuario(user);
         }else{
             return;
         }
@@ -170,8 +170,8 @@ public class HistorialPrestamos {
                 raf.writeUTF(prestamo.getLibro().getAutor());
                 raf.writeInt(prestamo.getIdPrestamo());
                 raf.writeInt(prestamo.getLibro().getCopiasDisponibles());
-                raf.writeUTF(prestamo.getLector().getNombre());
-                raf.writeUTF(prestamo.getLector().getTelefono());
+                raf.writeUTF(prestamo.getUsuario().getNombre());
+                raf.writeUTF(prestamo.getUsuario().getTelefono());
                 raf.writeUTF(prestamo.getFechaPrestamo());
                 raf.writeUTF(prestamo.getFechaPrevista());
                 raf.writeUTF(prestamo.getEstadoLibro());
@@ -195,8 +195,8 @@ public class HistorialPrestamos {
             fila[1] = prestamo.getLibro().getAutor();
             fila[2] = prestamo.getIdPrestamo();
             fila[3] = prestamo.getLibro().getCopiasDisponibles();
-            fila[4] = prestamo.getLector().getNombre();
-            fila[5] = prestamo.getLector().getTelefono();
+            fila[4] = prestamo.getUsuario().getNombre();
+            fila[5] = prestamo.getUsuario().getTelefono();
             fila[6] = prestamo.getFechaPrestamo();
             fila[7] = prestamo.getFechaPrevista();
             fila[8] = prestamo.getEstadoLibro();

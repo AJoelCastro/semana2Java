@@ -101,7 +101,7 @@ public class PrestamoBibliotecario {
         return usuario;
     }
 
-    public void setLector(Usuario usuario) {
+    public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
     }
     
