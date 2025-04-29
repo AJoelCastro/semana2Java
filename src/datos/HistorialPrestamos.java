@@ -152,6 +152,7 @@ public class HistorialPrestamos {
     public void editarPrestamo(int idPrestamo, String newDatePrevista, Libro lib){
         PrestamoBibliotecario prest = buscarPrestamoTotal(idPrestamo);
         ArrayList<PrestamoBibliotecario> historialPrestamos = leerIngresos();
+
         for(PrestamoBibliotecario prestamo : historialPrestamos){
             if(prest.getIdPrestamo() == prestamo.getIdPrestamo()){
                 prestamo.setFechaPrevista(newDatePrevista);
