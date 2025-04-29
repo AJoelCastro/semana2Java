@@ -40,6 +40,12 @@ public class panPrestamos extends javax.swing.JPanel {
         };
         
     }
+    
+    private void actualizarDatos(){
+        HistorialPrestamos historial = new HistorialPrestamos();
+        DefaultTableModel modelo = historial.getContenido();
+        tblPrestamos.setModel(modelo);
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -269,7 +275,42 @@ public class panPrestamos extends javax.swing.JPanel {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        String input = JOptionPane.showInputDialog(
+            this,
+            "Ingrese el ID del préstamo a eliminar:",
+            "Eliminar Préstamo",
+            JOptionPane.QUESTION_MESSAGE
+        );
         
+        if (input == null || input.trim().isEmpty()) {
+            return;
+        }
+
+        try {
+            int idPrestamo = Integer.parseInt(input.trim());
+            HistorialPrestamos historial = new HistorialPrestamos();
+            
+            historial.eliminarPrestamo(idPrestamo);
+            
+            DefaultTableModel modelo = historial.getContenido();
+            tblPrestamos.setModel(modelo);
+
+            JOptionPane.showMessageDialog(
+                this,
+                "Préstamo con ID " + idPrestamo + " eliminado correctamente.",
+                "Eliminación exitosa",
+                JOptionPane.INFORMATION_MESSAGE
+            );
+
+        } catch (NumberFormatException e) {
+            
+            JOptionPane.showMessageDialog(
+                this,
+                "ID inválido. Por favor, ingrese un número entero.",
+                "Error de formato",
+                JOptionPane.ERROR_MESSAGE
+            );
+        }
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
@@ -293,7 +334,9 @@ public class panPrestamos extends javax.swing.JPanel {
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        
+        JInternalFrame interna = new IfrmEditar();
+        centrarInternalFrame(interna);
+        actualizarDatos();
     }//GEN-LAST:event_jButton5ActionPerformed
 
 
