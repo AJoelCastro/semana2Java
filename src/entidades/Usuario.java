@@ -8,19 +8,23 @@ package entidades;
  *
  * @author Asus
  */
-public class Persona {
-   private String nombre;
+public class Usuario {
+    private String direccion;
+    private String nombre;
     private String apellido;
     private String correo;
     private String telefono;
     private int dni;
 
-    public Persona(String nombre, String apellido, int dni, String correo, String telefono) {
+    public Usuario(String nombre, String apellido, int dni, String correo, String telefono) {
         this.nombre = nombre;
         this.apellido = apellido;
         this.dni = dni;
         this.correo = correo;
         this.telefono = telefono;
+    }
+    public Usuario() {
+        
     }
 
     public String getNombre() {
@@ -32,6 +36,10 @@ public class Persona {
     }
     public int getDni() {
         return dni;
+    }
+    
+    public String getDireccion() {
+        return direccion;
     }
 
     public String getCorreo() {
@@ -51,6 +59,10 @@ public class Persona {
     }
     public void setDni(int dni) {
         this.dni = dni;
+    }
+    
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
     }
 
     @Override

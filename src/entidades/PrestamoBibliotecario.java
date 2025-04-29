@@ -15,21 +15,21 @@ public class PrestamoBibliotecario {
     private String fechaDevolucion;
     private String estadoLibro;
     private Libro libro;
-    private Lector lector;
+    private Usuario usuario;
     private float multa = 0.0f;
     private int cantidadLibros = 0;
 
     public PrestamoBibliotecario() {
-        this(0,"--/--/--", "--/--/--", "--/--/--", "NN", new Libro(), new Lector());
+        this(0,"--/--/--", "--/--/--", "--/--/--", "NN", new Libro(), new Usuario());
     }
 
     public PrestamoBibliotecario(int idPrestamo,String fechaPrestamo, String fechaPrevista,
-            String fechaDevolucion, String estadoLibro, Libro libro, Lector lector) {
+            String fechaDevolucion, String estadoLibro, Libro libro, Usuario usuario) {
         this.fechaDevolucion = fechaDevolucion;
         this.fechaPrestamo = fechaPrestamo;
         this.fechaPrevista = fechaPrevista;
         this.estadoLibro = estadoLibro;
-        this.lector = lector;
+        this.usuario = usuario;
         this.libro = libro;
     }
 
@@ -97,12 +97,12 @@ public class PrestamoBibliotecario {
         this.libro = libro;
     }
 
-    public Lector getLector() {
-        return lector;
+    public Usuario getUsuario() {
+        return usuario;
     }
 
-    public void setLector(Lector lector) {
-        this.lector = lector;
+    public void setLector(Usuario usuario) {
+        this.usuario = usuario;
     }
     
     @Override
@@ -114,9 +114,7 @@ public class PrestamoBibliotecario {
                 + "Fecha de devolucion: " + getFechaDevolucion()
                 + "Estado del Libro: " + getEstadoLibro()
                 + "Multa a pagar: " + getMulta()
-                + "Cantidad de Libros: " + getCantidadLibros()
-                + "Nombres del lector: " + lector.getNombre()
-                + "Apelidos del lector: " + lector.getApellido();
+                + "Cantidad de Libros: " + getCantidadLibros();
     }
 }
 
