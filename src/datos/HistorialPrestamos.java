@@ -113,6 +113,9 @@ public class HistorialPrestamos {
             if (prestamo1.getIdPrestamo() == prestamo.getIdPrestamo()) {
                 throw new Error("El id de préstamo ya existe");
             }
+            if(prestamo1.getUsuario().getDni()==prestamo.getUsuario().getDni()){
+                throw new Error("El usuario ya tiene un prestamo pendiente");
+            }
         }
         try (RandomAccessFile raf = new RandomAccessFile(nombreArchivo, "rw")) {
             raf.seek(raf.length());
