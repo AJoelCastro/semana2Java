@@ -74,7 +74,7 @@ public class panPrestamos extends javax.swing.JPanel {
         jButton1 = new BotonPersonalizado("", botonBlanco,presionadoBuscar,encimaBuscar);
         jLabel2 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tblPrestamos = new javax.swing.JTable();
 
         setBackground(new java.awt.Color(255, 255, 255));
 
@@ -153,7 +153,7 @@ public class panPrestamos extends javax.swing.JPanel {
         jLabel2.setFont(new java.awt.Font("Segoe UI Semibold", 0, 14)); // NOI18N
         jLabel2.setText("Buscar por:");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tblPrestamos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -164,7 +164,7 @@ public class panPrestamos extends javax.swing.JPanel {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(tblPrestamos);
 
         dspFondo.setLayer(jButton4, javax.swing.JLayeredPane.DEFAULT_LAYER);
         dspFondo.setLayer(jButton5, javax.swing.JLayeredPane.DEFAULT_LAYER);
@@ -237,9 +237,9 @@ public class panPrestamos extends javax.swing.JPanel {
                 .addGroup(dspFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(dspFondoLayout.createSequentialGroup()
                         .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGap(12, 12, 12)
                         .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(12, 12, 12)
                         .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -273,7 +273,23 @@ public class panPrestamos extends javax.swing.JPanel {
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        
+        DefaultTableModel modelo = new DefaultTableModel();
+
+        String[] columnas = {
+        "Titulo Libro", "Autor", "Id Prestamo", "Copias Disponibles",
+        "Usuario", "Telefono", "Fecha-Prestamo", "Fecha-Prevista","Estado"
+        };
+        modelo.setColumnIdentifiers(columnas);
+
+        HistorialPrestamos historialPrestamos = new HistorialPrestamos();
+        modelo = historialPrestamos.getContenido();
+        if (modelo != null) {
+            tblPrestamos.setModel(modelo);
+            // Asignar el modelo a la tabla gráfica (tblHistorial) para mostrar los datos
+        } else {
+        JOptionPane.showMessageDialog(this, "No hay profesores registrados");
+        // Mostrar un mensaje si no hay datos para cargar
+        }
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
@@ -296,8 +312,8 @@ public class panPrestamos extends javax.swing.JPanel {
     private javax.swing.JRadioButton jRadioButton3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JTable jTable1;
     private javax.swing.JTextField jTextField1;
+    private javax.swing.JTable tblPrestamos;
     // End of variables declaration//GEN-END:variables
     private Color botonBlanco = new Color(255,255,255);
     private Color presionadoBuscar = new Color(200,200,200);

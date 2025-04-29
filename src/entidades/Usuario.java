@@ -16,12 +16,13 @@ public class Usuario {
     private String telefono;
     private int dni;
 
-    public Usuario(String nombre, String apellido, int dni, String correo, String telefono) {
+    public Usuario(String nombre, String apellido, int dni, String correo, String telefono,String direccion) {
         this.nombre = nombre;
         this.apellido = apellido;
         this.dni = dni;
         this.correo = correo;
         this.telefono = telefono;
+        this.direccion = direccion;
     }
     public Usuario() {
         

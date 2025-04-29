@@ -4,6 +4,9 @@
  */
 package entidades;
 
+import java.text.SimpleDateFormat;
+import java.util.GregorianCalendar;
+
 /**
  *
  * @author Administrador
@@ -20,17 +23,22 @@ public class PrestamoBibliotecario {
     private int cantidadLibros = 0;
 
     public PrestamoBibliotecario() {
-        this(0,"--/--/--", "--/--/--", "--/--/--", "NN", new Libro(), new Usuario());
+        this(0,"--/--/--",new Libro(), new Usuario());
     }
 
-    public PrestamoBibliotecario(int idPrestamo,String fechaPrestamo, String fechaPrevista,
-            String fechaDevolucion, String estadoLibro, Libro libro, Usuario usuario) {
-        this.fechaDevolucion = fechaDevolucion;
-        this.fechaPrestamo = fechaPrestamo;
+    public PrestamoBibliotecario(int idPrestamo, String fechaPrevista, Libro libro, Usuario usuario) {
+        this.idPrestamo = idPrestamo;
+        this.fechaPrestamo = obtenerFechaActual();
         this.fechaPrevista = fechaPrevista;
-        this.estadoLibro = estadoLibro;
         this.usuario = usuario;
         this.libro = libro;
+    }
+    
+    // Método para obtener la fecha actual en formato "dd/MM/yyyy" usando GregorianCalendar
+    private static String obtenerFechaActual() {
+        GregorianCalendar calendario = new GregorianCalendar(); // Crear un objeto GregorianCalendar
+        SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy"); // Definir el formato de fecha
+        return formato.format(calendario.getTime()); // Obtener la fecha actual formateada
     }
 
     public int getIdPrestamo() {
