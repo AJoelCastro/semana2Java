@@ -97,7 +97,7 @@ public class IfrmRegistroPrestamos extends javax.swing.JInternalFrame {
 
         lblCodigo.setText("Fecha Prevista de Devolución :");
 
-        lblTitulo.setText("Título :");
+        lblTitulo.setText("Codigo de Libro :");
 
         lblPublicacion.setText("Año de Publicación :");
 
@@ -210,9 +210,9 @@ public class IfrmRegistroPrestamos extends javax.swing.JInternalFrame {
                     .addComponent(txtISBN, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(0, 0, 0)
                 .addComponent(jSeparator9, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(26, 26, 26)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 143, Short.MAX_VALUE)
                 .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(39, Short.MAX_VALUE))
+                .addGap(36, 36, 36))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());

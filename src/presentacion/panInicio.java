@@ -37,19 +37,10 @@ public class panInicio extends javax.swing.JPanel {
         Image image = icon.getImage();
         panFondo = new javax.swing.JPanel(){
             public void paintComponent(Graphics g){
-                super.paintComponent(g); // Llama al método de la superclase para la funcionalidad básica
+                super.paintComponent(g);
                 Graphics2D g2d = (Graphics2D) g;
 
-                // Dibuja la imagen
                 g2d.drawImage(image, 0, 0, getWidth(), getHeight(), this);
-
-                // Aplicar un filtro oscuro para oscurecer la imagen (50% de opacidad)
-                //g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.6f)); // Control de opacidad
-                //g2d.setColor(new Color(0, 0, 0, 100)); // Color negro con cierta transparencia
-                //g2d.fillRect(0, 0, getWidth(), getHeight()); // Rellenar el panel con el filtro oscuro
-
-                // Restaurar la opacidad a 1.0f (sin transparencia) para otros componentes
-                //g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
             }
         }
         ;

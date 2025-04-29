@@ -24,6 +24,21 @@ public class panLibros extends javax.swing.JPanel {
     public panLibros() {
         initComponents();
     }
+    private void centrarInternalFrame (JInternalFrame interna) {
+        int x,y;
+        
+        x=dspFondo.getWidth()/2 - interna.getWidth()/2;
+        y=dspFondo.getHeight()/2- interna.getHeight()/2;
+        if(interna.isShowing())
+        interna.setLocation(x,y);
+        
+        else {
+            dspFondo.add(interna);
+            interna.setLocation(x,y);
+            interna.show();
+        };
+        
+    }
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -35,60 +50,36 @@ public class panLibros extends javax.swing.JPanel {
     private void initComponents() {
 
         buttonGroup1 = new javax.swing.ButtonGroup();
-        panFondo = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        txtBusqueda = new javax.swing.JTextField();
-        btnBuscar = new BotonPersonalizado("", botonBlanco,presionadoBuscar,encimaBuscar);
-        jSeparator1 = new javax.swing.JSeparator();
-        btnAgregar = new BotonPersonalizado("", botonBlanco,presionadoBuscar,encimaBuscar);
+        ImageIcon icon = new ImageIcon(getClass().getResource("/imagenes/fondoLibros.png"));
+        Image image = icon.getImage();
+        dspFondo = new javax.swing.JDesktopPane(){
+            public void paintComponent(Graphics g){
+                super.paintComponent(g);
+                Graphics2D g2d = (Graphics2D) g;
+
+                g2d.drawImage(image, 0, 0, getWidth(), getHeight(), this);
+            }
+        };
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
-        jLabel2 = new javax.swing.JLabel();
+        btnListar = new BotonPersonalizado("", botonBlanco,presionadoBuscar,encimaBuscar);
+        btnEditar = new BotonPersonalizado("", botonBlanco,presionadoBuscar,encimaBuscar);
+        btnEliminar = new BotonPersonalizado("", botonBlanco,presionadoBuscar,encimaBuscar);
+        btnAgregar = new BotonPersonalizado("", botonBlanco,presionadoBuscar,encimaBuscar);
         jRadioButton1 = new javax.swing.JRadioButton();
         jRadioButton2 = new javax.swing.JRadioButton();
         jRadioButton3 = new javax.swing.JRadioButton();
         jRadioButton4 = new javax.swing.JRadioButton();
-        btnEliminar = new BotonPersonalizado("", botonBlanco,presionadoBuscar,encimaBuscar);
-        btnListar = new BotonPersonalizado("", botonBlanco,presionadoBuscar,encimaBuscar);
-        btnEditar = new BotonPersonalizado("", botonBlanco,presionadoBuscar,encimaBuscar);
+        jLabel2 = new javax.swing.JLabel();
+        jSeparator1 = new javax.swing.JSeparator();
+        txtBusqueda = new javax.swing.JTextField();
+        btnBuscar = new BotonPersonalizado("", botonBlanco,presionadoBuscar,encimaBuscar);
+        jLabel1 = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(255, 255, 255));
         setPreferredSize(new java.awt.Dimension(1280, 720));
 
-        panFondo.setBackground(new java.awt.Color(60, 176, 200));
-        panFondo.setRequestFocusEnabled(false);
-
-        jLabel1.setFont(new java.awt.Font("Roboto", 1, 24)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setText("Control de Libros");
-
-        txtBusqueda.setBackground(new java.awt.Color(60, 176, 200));
-        txtBusqueda.setBorder(null);
-
-        btnBuscar.setBackground(new java.awt.Color(60, 176, 200));
-        btnBuscar.setForeground(new java.awt.Color(255, 255, 255));
-        btnBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/lupa.png"))); // NOI18N
-        btnBuscar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnBuscarActionPerformed(evt);
-            }
-        });
-
-        jSeparator1.setBackground(new java.awt.Color(0, 0, 0));
-        jSeparator1.setForeground(new java.awt.Color(0, 0, 0));
-        jSeparator1.setOpaque(true);
-
-        btnAgregar.setBackground(new java.awt.Color(60, 176, 200));
-        btnAgregar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        btnAgregar.setForeground(new java.awt.Color(255, 255, 255));
-        btnAgregar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/añadir.png"))); // NOI18N
-        btnAgregar.setText("  Agregar Libro");
-        btnAgregar.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnAgregar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAgregarActionPerformed(evt);
-            }
-        });
+        dspFondo.setBackground(new java.awt.Color(60, 176, 200));
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -102,42 +93,6 @@ public class panLibros extends javax.swing.JPanel {
             }
         ));
         jScrollPane1.setViewportView(jTable1);
-
-        jLabel2.setFont(new java.awt.Font("Segoe UI Semibold", 0, 14)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel2.setText("Buscar por:");
-
-        buttonGroup1.add(jRadioButton1);
-        jRadioButton1.setFont(new java.awt.Font("Segoe UI Semibold", 0, 12)); // NOI18N
-        jRadioButton1.setForeground(new java.awt.Color(255, 255, 255));
-        jRadioButton1.setText("Autor");
-
-        buttonGroup1.add(jRadioButton2);
-        jRadioButton2.setFont(new java.awt.Font("Segoe UI Semibold", 0, 12)); // NOI18N
-        jRadioButton2.setForeground(new java.awt.Color(255, 255, 255));
-        jRadioButton2.setText("Titulo");
-
-        buttonGroup1.add(jRadioButton3);
-        jRadioButton3.setFont(new java.awt.Font("Segoe UI Semibold", 0, 12)); // NOI18N
-        jRadioButton3.setForeground(new java.awt.Color(255, 255, 255));
-        jRadioButton3.setText("Codigo");
-
-        buttonGroup1.add(jRadioButton4);
-        jRadioButton4.setFont(new java.awt.Font("Segoe UI Semibold", 0, 12)); // NOI18N
-        jRadioButton4.setForeground(new java.awt.Color(255, 255, 255));
-        jRadioButton4.setText("Categoria");
-
-        btnEliminar.setBackground(new java.awt.Color(60, 176, 200));
-        btnEliminar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        btnEliminar.setForeground(new java.awt.Color(255, 255, 255));
-        btnEliminar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/eliminar.png"))); // NOI18N
-        btnEliminar.setText("  Eliminar Libro");
-        btnEliminar.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnEliminarActionPerformed(evt);
-            }
-        });
 
         btnListar.setBackground(new java.awt.Color(60, 176, 200));
         btnListar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
@@ -163,184 +118,202 @@ public class panLibros extends javax.swing.JPanel {
             }
         });
 
-        javax.swing.GroupLayout panFondoLayout = new javax.swing.GroupLayout(panFondo);
-        panFondo.setLayout(panFondoLayout);
-        panFondoLayout.setHorizontalGroup(
-            panFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panFondoLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(panFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panFondoLayout.createSequentialGroup()
-                        .addGroup(panFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jSeparator1)
-                            .addComponent(txtBusqueda, javax.swing.GroupLayout.DEFAULT_SIZE, 599, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(panFondoLayout.createSequentialGroup()
-                        .addGap(247, 247, 247)
-                        .addComponent(jLabel1)))
-                .addGap(295, 295, 295))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panFondoLayout.createSequentialGroup()
-                .addGap(18, 18, 18)
-                .addGroup(panFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        btnEliminar.setBackground(new java.awt.Color(60, 176, 200));
+        btnEliminar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnEliminar.setForeground(new java.awt.Color(255, 255, 255));
+        btnEliminar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/eliminar.png"))); // NOI18N
+        btnEliminar.setText("  Eliminar Libro");
+        btnEliminar.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarActionPerformed(evt);
+            }
+        });
+
+        btnAgregar.setBackground(new java.awt.Color(60, 176, 200));
+        btnAgregar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnAgregar.setForeground(new java.awt.Color(255, 255, 255));
+        btnAgregar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/añadir.png"))); // NOI18N
+        btnAgregar.setText("  Agregar Libro");
+        btnAgregar.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnAgregar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAgregarActionPerformed(evt);
+            }
+        });
+
+        buttonGroup1.add(jRadioButton1);
+        jRadioButton1.setFont(new java.awt.Font("Segoe UI Semibold", 0, 12)); // NOI18N
+        jRadioButton1.setForeground(new java.awt.Color(255, 255, 255));
+        jRadioButton1.setText("Autor");
+
+        buttonGroup1.add(jRadioButton2);
+        jRadioButton2.setFont(new java.awt.Font("Segoe UI Semibold", 0, 12)); // NOI18N
+        jRadioButton2.setForeground(new java.awt.Color(255, 255, 255));
+        jRadioButton2.setText("Titulo");
+
+        buttonGroup1.add(jRadioButton3);
+        jRadioButton3.setFont(new java.awt.Font("Segoe UI Semibold", 0, 12)); // NOI18N
+        jRadioButton3.setForeground(new java.awt.Color(255, 255, 255));
+        jRadioButton3.setText("Codigo");
+
+        buttonGroup1.add(jRadioButton4);
+        jRadioButton4.setFont(new java.awt.Font("Segoe UI Semibold", 0, 12)); // NOI18N
+        jRadioButton4.setForeground(new java.awt.Color(255, 255, 255));
+        jRadioButton4.setText("Categoria");
+
+        jLabel2.setFont(new java.awt.Font("Segoe UI Semibold", 0, 14)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel2.setText("Buscar por:");
+
+        jSeparator1.setBackground(new java.awt.Color(0, 0, 0));
+        jSeparator1.setForeground(new java.awt.Color(0, 0, 0));
+        jSeparator1.setOpaque(true);
+
+        txtBusqueda.setBackground(new java.awt.Color(60, 176, 200));
+        txtBusqueda.setBorder(null);
+
+        btnBuscar.setBackground(new java.awt.Color(60, 176, 200));
+        btnBuscar.setForeground(new java.awt.Color(255, 255, 255));
+        btnBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/lupa.png"))); // NOI18N
+        btnBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarActionPerformed(evt);
+            }
+        });
+
+        jLabel1.setFont(new java.awt.Font("Roboto", 1, 24)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel1.setText("Control de Libros");
+
+        dspFondo.setLayer(jScrollPane1, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        dspFondo.setLayer(btnListar, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        dspFondo.setLayer(btnEditar, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        dspFondo.setLayer(btnEliminar, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        dspFondo.setLayer(btnAgregar, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        dspFondo.setLayer(jRadioButton1, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        dspFondo.setLayer(jRadioButton2, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        dspFondo.setLayer(jRadioButton3, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        dspFondo.setLayer(jRadioButton4, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        dspFondo.setLayer(jLabel2, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        dspFondo.setLayer(jSeparator1, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        dspFondo.setLayer(txtBusqueda, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        dspFondo.setLayer(btnBuscar, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        dspFondo.setLayer(jLabel1, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        javax.swing.GroupLayout dspFondoLayout = new javax.swing.GroupLayout(dspFondo);
+        dspFondo.setLayout(dspFondoLayout);
+        dspFondoLayout.setHorizontalGroup(
+            dspFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, dspFondoLayout.createSequentialGroup()
+                .addGap(116, 116, 116)
+                .addGroup(dspFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnEditar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnEliminar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnListar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnAgregar, javax.swing.GroupLayout.DEFAULT_SIZE, 156, Short.MAX_VALUE))
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1056, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(32, 32, 32))
-            .addGroup(panFondoLayout.createSequentialGroup()
-                .addGap(335, 335, 335)
-                .addComponent(jLabel2)
-                .addGap(70, 70, 70)
-                .addComponent(jRadioButton1)
-                .addGap(50, 50, 50)
-                .addComponent(jRadioButton2)
-                .addGap(50, 50, 50)
-                .addComponent(jRadioButton3)
-                .addGap(50, 50, 50)
-                .addComponent(jRadioButton4)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(btnAgregar, javax.swing.GroupLayout.DEFAULT_SIZE, 175, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
+                .addGroup(dspFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, dspFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(dspFondoLayout.createSequentialGroup()
+                            .addGroup(dspFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(jSeparator1)
+                                .addComponent(txtBusqueda, javax.swing.GroupLayout.PREFERRED_SIZE, 599, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(dspFondoLayout.createSequentialGroup()
+                            .addGap(247, 247, 247)
+                            .addComponent(jLabel1)))
+                    .addGroup(dspFondoLayout.createSequentialGroup()
+                        .addGap(40, 40, 40)
+                        .addComponent(jLabel2)
+                        .addGap(70, 70, 70)
+                        .addComponent(jRadioButton1)
+                        .addGap(50, 50, 50)
+                        .addComponent(jRadioButton2)
+                        .addGap(50, 50, 50)
+                        .addComponent(jRadioButton3)
+                        .addGap(50, 50, 50)
+                        .addComponent(jRadioButton4))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 690, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(269, 269, 269))
         );
-        panFondoLayout.setVerticalGroup(
-            panFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panFondoLayout.createSequentialGroup()
-                .addGap(180, 180, 180)
-                .addComponent(btnAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnListar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panFondoLayout.createSequentialGroup()
-                .addGap(34, 34, 34)
+        dspFondoLayout.setVerticalGroup(
+            dspFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, dspFondoLayout.createSequentialGroup()
+                .addGap(40, 40, 40)
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(panFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(12, 12, 12)
+                .addGroup(dspFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(panFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(dspFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                         .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(txtBusqueda, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(panFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGap(10, 10, 10)
+                .addGroup(dspFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(jRadioButton1)
                     .addComponent(jRadioButton2)
                     .addComponent(jRadioButton3)
                     .addComponent(jRadioButton4))
-                .addGap(20, 20, 20)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 506, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(58, 58, 58))
+                .addGap(48, 48, 48)
+                .addGroup(dspFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(dspFondoLayout.createSequentialGroup()
+                        .addComponent(btnAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnListar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 440, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(59, 59, 59))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(panFondo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(dspFondo)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(panFondo, javax.swing.GroupLayout.PREFERRED_SIZE, 720, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(dspFondo, javax.swing.GroupLayout.Alignment.TRAILING)
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnBuscarActionPerformed
+    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
 
-    private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
-        // Crear el JInternalFrame
-        // Crear el JInternalFrame
-        JInternalFrame interna = new IfrmRegistroLibros();
-
-        // Asegurarnos de que se agregue al JDesktopPane, pero no bloquee otros componentes
-        if (!interna.isVisible()) {
-            panFondo.add(interna); // panFondo es el contenedor principal
-            panFondo.setComponentZOrder(interna, 0); // Mueve el JInternalFrame al fondo para no bloquear otros componentes
-            interna.setLocation(panFondo.getWidth() / 2 - interna.getWidth() / 2, 
-                                panFondo.getHeight() / 2 - interna.getHeight() / 2); // Centrado en el contenedor
-            interna.setVisible(true); // Mostrar el JInternalFrame
-        }
-    }//GEN-LAST:event_btnAgregarActionPerformed
-
-    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-        String idLibro = JOptionPane.showInputDialog(this, "Ingrese el ID del libro a eliminar:");
-        
-        if (idLibro == null || idLibro.trim().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Debe ingresar un ID válido para eliminar el libro.", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-        
-        try {
-            ListaLibros.eliminarLibro(idLibro);
-            JOptionPane.showMessageDialog(this, "Libro eliminado correctamente.");
-        } catch (IOException ex) {
-            JOptionPane.showMessageDialog(this, "Error al eliminar el libro: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-        }
-    }//GEN-LAST:event_btnEliminarActionPerformed
+    }//GEN-LAST:event_btnEditarActionPerformed
 
     private void btnListarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnListarActionPerformed
         try {
-            
+
             DefaultTableModel modelo = new DefaultTableModel();
-            
+
             String[] columnas = { "ID", "Código", "Título", "Autor", "Categoría", "Año", "Copias Disponibles", "Editorial", "ISBN" };
             modelo.setColumnIdentifiers(columnas);
-            
+
             ListaLibros.listarTodos(modelo);
-            
+
             jTable1.setModel(modelo);
         } catch (IOException ex) {
             JOptionPane.showMessageDialog(this, "Error al listar los libros: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnListarActionPerformed
 
-    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
-        String idLibro = JOptionPane.showInputDialog(this, "Ingrese el ID del libro a editar:");
-        
-        if (idLibro == null || idLibro.trim().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Debe ingresar un ID válido para editar el libro.", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
+    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
 
-        try {
-            Libro libroExistente = ListaLibros.buscarPorCodigo(idLibro);
+    }//GEN-LAST:event_btnEliminarActionPerformed
 
-            if (libroExistente != null) {
-                String nuevoTitulo = JOptionPane.showInputDialog(this, "Ingrese el nuevo título del libro:", libroExistente.getTitulo());
-                String nuevoAutor = JOptionPane.showInputDialog(this, "Ingrese el nuevo autor del libro:", libroExistente.getAutor());
-                String nuevaCategoria = JOptionPane.showInputDialog(this, "Ingrese la nueva categoría del libro:", libroExistente.getCategoria());
-                String anioPublicacionStr = JOptionPane.showInputDialog(this, "Ingrese el nuevo año de publicación:", libroExistente.getAnioPublicacion());
-                String copiasDisponiblesStr = JOptionPane.showInputDialog(this, "Ingrese las nuevas copias disponibles:", libroExistente.getCopiasDisponibles());
-                String nuevoEditorial = JOptionPane.showInputDialog(this, "Ingrese la nueva editorial:", libroExistente.getEditorial());
-                
-                int nuevoAnioPublicacion;
-                int nuevasCopiasDisponibles;
-                try {
-                    nuevoAnioPublicacion = Integer.parseInt(anioPublicacionStr);
-                    nuevasCopiasDisponibles = Integer.parseInt(copiasDisponiblesStr);
-                } catch (NumberFormatException e) {
-                    JOptionPane.showMessageDialog(this, "Año de publicación y copias disponibles deben ser números válidos.", "Error", JOptionPane.ERROR_MESSAGE);
-                    return;
-                }
-                
-                Libro libroEditado = new Libro(libroExistente.getCodigo(), nuevoTitulo, nuevoAutor, nuevaCategoria, nuevoAnioPublicacion, nuevasCopiasDisponibles, nuevoEditorial);
-                
-                ListaLibros.editarLibro(libroExistente.getCodigo(), libroEditado);
+    private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
+        JInternalFrame interna = new IfrmRegistroLibros();
+        centrarInternalFrame(interna);
+    }//GEN-LAST:event_btnAgregarActionPerformed
 
-                JOptionPane.showMessageDialog(this, "Libro editado correctamente.");
-            } else {
-                JOptionPane.showMessageDialog(this, "No se encontró un libro con ese código.", "Error", JOptionPane.ERROR_MESSAGE);
-            }
-        } catch (IOException ex) {
-            JOptionPane.showMessageDialog(this, "Error al editar el libro: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-        }
-
-    }//GEN-LAST:event_btnEditarActionPerformed
+    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnBuscarActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -350,6 +323,7 @@ public class panLibros extends javax.swing.JPanel {
     private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnListar;
     private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.JDesktopPane dspFondo;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JRadioButton jRadioButton1;
@@ -359,7 +333,6 @@ public class panLibros extends javax.swing.JPanel {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTable jTable1;
-    private javax.swing.JPanel panFondo;
     private javax.swing.JTextField txtBusqueda;
     // End of variables declaration//GEN-END:variables
     private Color botonBlanco = new Color(60,176,200);

@@ -115,9 +115,8 @@ public class HistorialPrestamos {
             }
         }
         try (RandomAccessFile raf = new RandomAccessFile(nombreArchivo, "rw")) {
-            raf.seek(raf.length()); // Ir al final del archivo
+            raf.seek(raf.length());
             
-            // Guardamos los datos del libro
             raf.writeUTF(prestamo.getLibro().getCodigo());
             raf.writeUTF(prestamo.getLibro().getTitulo());
             raf.writeUTF(prestamo.getLibro().getAutor());
