@@ -187,7 +187,7 @@ public class HistorialPrestamos {
         DefaultTableModel modelo = new DefaultTableModel();
         String[] columnas = {
             "Titulo Libro", "Autor", "Id Prestamo", "Copias Disponibles",
-            "Nombre Lector", "Telefono", "Fecha-Prestamo", "Fecha-Prevista","Estado"
+            "Usuario", "Telefono", "Fecha-Prestamo", "Fecha-Prevista","Estado"
         };
         modelo.setColumnIdentifiers(columnas); // Establecer nombres de columnas
 
