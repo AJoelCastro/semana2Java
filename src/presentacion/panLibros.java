@@ -206,13 +206,13 @@ public class panLibros extends javax.swing.JPanel {
         dspFondoLayout.setHorizontalGroup(
             dspFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, dspFondoLayout.createSequentialGroup()
-                .addGap(116, 116, 116)
-                .addGroup(dspFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(164, 164, 164)
+                .addGroup(dspFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(btnEditar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnEliminar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnListar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnAgregar, javax.swing.GroupLayout.DEFAULT_SIZE, 175, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
+                    .addComponent(btnEliminar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnAgregar, javax.swing.GroupLayout.DEFAULT_SIZE, 152, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 70, Short.MAX_VALUE)
                 .addGroup(dspFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, dspFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(dspFondoLayout.createSequentialGroup()
@@ -236,7 +236,7 @@ public class panLibros extends javax.swing.JPanel {
                         .addGap(50, 50, 50)
                         .addComponent(jRadioButton4))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 690, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(269, 269, 269))
+                .addGap(199, 199, 199))
         );
         dspFondoLayout.setVerticalGroup(
             dspFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -303,7 +303,39 @@ public class panLibros extends javax.swing.JPanel {
     }//GEN-LAST:event_btnListarActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+        // Obtener el código del libro a eliminar desde un campo de texto de búsqueda o selección
+        String codigoLibro = txtBusqueda.getText();  // Por ejemplo, si se ingresa el código en un campo de texto
 
+        if (codigoLibro.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Por favor ingresa un código de libro válido.", "Error", JOptionPane.ERROR_MESSAGE);
+        } else {
+            // Mostrar el diálogo de confirmación
+            int confirmacion = JOptionPane.showConfirmDialog(
+                this, 
+                "¿Estás seguro de que deseas eliminar el libro con código: " + codigoLibro + "?", 
+                "Confirmar Eliminación", 
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.WARNING_MESSAGE
+            );
+
+            // Si el usuario confirma la eliminación
+            if (confirmacion == JOptionPane.YES_OPTION) {
+                try {
+                    // Llamar al método para eliminar el libro
+                    ListaLibros.eliminarLibro(codigoLibro);
+                    JOptionPane.showMessageDialog(this, "Libro eliminado correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+
+                    // Actualizar la tabla después de la eliminación
+                    DefaultTableModel modelo = new DefaultTableModel();
+                    String[] columnas = {"ID", "Código", "Título", "Autor", "Categoría", "Año", "Copias Disponibles", "Editorial"};
+                    modelo.setColumnIdentifiers(columnas);
+                    ListaLibros.listarTodos(modelo);
+                    jTable1.setModel(modelo);
+                } catch (IOException ex) {
+                    JOptionPane.showMessageDialog(this, "Error al eliminar el libro: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        }
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
