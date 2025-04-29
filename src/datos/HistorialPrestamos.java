@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
+import java.util.HashSet;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -139,20 +140,27 @@ public class HistorialPrestamos {
     }
     
     public void eliminarPrestamo(int idPrestamo) {
-        PrestamoBibliotecario prest = buscarPrestamoTotal(idPrestamo);
         ArrayList<PrestamoBibliotecario> historialPrestamos = leerIngresos();
-        historialPrestamos.remove(prest);
-        guardarHistorialCompleto(historialPrestamos);
+        boolean borrado = historialPrestamos.removeIf(p -> p.getIdPrestamo() == idPrestamo);
+        if (borrado) {
+            guardarHistorialCompleto(historialPrestamos);
+        } else {
+            System.out.println("No se encontró préstamo con ID " + idPrestamo);
+        }
     }
     
     public void editarPrestamo(int idPrestamo, String newDatePrevista, Libro lib){
         PrestamoBibliotecario prest = buscarPrestamoTotal(idPrestamo);
         ArrayList<PrestamoBibliotecario> historialPrestamos = leerIngresos();
-        if(historialPrestamos.contains(prest)){
-            prest.setFechaPrevista(newDatePrevista);
-            prest.setLibro(lib);
-        }else{
-            return;
+
+        for(PrestamoBibliotecario prestamo : historialPrestamos){
+            if(prest.getIdPrestamo() == prestamo.getIdPrestamo()){
+                prestamo.setFechaPrevista(newDatePrevista);
+                prestamo.setLibro(lib);
+            }else{
+                return;
+            }
+            
         }
         guardarHistorialCompleto(historialPrestamos);
     }
