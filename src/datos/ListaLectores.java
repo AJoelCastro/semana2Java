@@ -56,8 +56,7 @@ public class ListaLectores {
                 flujo.seek(posicion * TAMREG);
                 flujo.writeUTF(lector.getNombre());
                 flujo.writeUTF(lector.getApellido());
-                flujo.writeUTF(lector.getTipo());
-                flujo.writeUTF(lector.getId());
+                flujo.writeInt(lector.getDni());
                 flujo.writeUTF(lector.getDireccion());
                 flujo.writeBoolean(lector.isActivo());
                 flujo.writeInt(lector.getLimitePrestamos());
@@ -78,23 +77,22 @@ public class ListaLectores {
     }
 
     public static Lector getLector(int pos) {
-        String nombre, apellido, id, tipo, direccion, correo, telefono;
+        String nombre, apellido, direccion, correo, telefono;
         boolean activo;
-        int limitePrestamos;
+        int limitePrestamos,dni;
         Lector lector = null;
         try {
             crearArchivo();
             flujo.seek(pos * TAMREG);
             nombre = flujo.readUTF();
             apellido = flujo.readUTF();
-            id = flujo.readUTF();
-            tipo = flujo.readUTF();
+            dni = flujo.readInt();
             direccion = flujo.readUTF();
             activo = flujo.readBoolean();
             limitePrestamos = flujo.readInt();
             correo = flujo.readUTF();
             telefono = flujo.readUTF();
-            lector = new Lector(id, tipo, direccion, activo, limitePrestamos, nombre, apellido, correo, telefono);
+            lector = new Lector(direccion, activo, limitePrestamos, nombre, apellido,dni, correo, telefono);
         } catch (IOException ex) {
             System.out.println("Problema de E/S: " + ex.getMessage());
         } finally {

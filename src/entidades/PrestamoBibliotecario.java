@@ -116,8 +116,7 @@ public class PrestamoBibliotecario {
                 + "Multa a pagar: " + getMulta()
                 + "Cantidad de Libros: " + getCantidadLibros()
                 + "Nombres del lector: " + lector.getNombre()
-                + "Apelidos del lector: " + lector.getApellido()
-                + "Codigo del lector: " + lector.getId();
+                + "Apelidos del lector: " + lector.getApellido();
     }
 }
 
