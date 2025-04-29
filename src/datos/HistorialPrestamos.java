@@ -145,13 +145,12 @@ public class HistorialPrestamos {
         guardarHistorialCompleto(historialPrestamos);
     }
     
-    public void editarPrestamo(int idPrestamo, String newDatePrevista, Libro lib, Usuario user){
+    public void editarPrestamo(int idPrestamo, String newDatePrevista, Libro lib){
         PrestamoBibliotecario prest = buscarPrestamoTotal(idPrestamo);
         ArrayList<PrestamoBibliotecario> historialPrestamos = leerIngresos();
         if(historialPrestamos.contains(prest)){
             prest.setFechaPrevista(newDatePrevista);
             prest.setLibro(lib);
-            prest.setUsuario(user);
         }else{
             return;
         }
