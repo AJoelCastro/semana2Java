@@ -11,6 +11,7 @@ import entidades.*;
 import java.io.IOException;
 import javax.swing.table.DefaultTableModel;
 import datos.ListaLibros.*;
+import java.util.ArrayList;
 
 /**
  *
@@ -171,6 +172,7 @@ public class panLibros extends javax.swing.JPanel {
         jSeparator1.setOpaque(true);
 
         txtBusqueda.setBackground(new java.awt.Color(60, 176, 200));
+        txtBusqueda.setForeground(new java.awt.Color(255, 255, 255));
         txtBusqueda.setBorder(null);
 
         btnBuscar.setBackground(new java.awt.Color(60, 176, 200));
@@ -283,55 +285,75 @@ public class panLibros extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
-        JInternalFrame interna = new IfrmEditar();
+        JInternalFrame interna = new IfrmLibros();
         centrarInternalFrame(interna);
         
     }//GEN-LAST:event_btnEditarActionPerformed
 
     private void btnListarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnListarActionPerformed
         try {
+        DefaultTableModel modelo = new DefaultTableModel();
 
-            DefaultTableModel modelo = new DefaultTableModel();
+        String[] columnas = {"Código", "Título", "Autor", "Categoría", "Año", "Copias Disponibles", "Editorial"};
+        modelo.setColumnIdentifiers(columnas);
 
-            String[] columnas = { "ID", "Código", "Título", "Autor", "Categoría", "Año", "Copias Disponibles", "Editorial", "ISBN" };
-            modelo.setColumnIdentifiers(columnas);
+        ArrayList<Libro> libros = ListaLibros.listarTodos();
 
-            ListaLibros.listarTodos(modelo);
+        for (Libro libro : libros) {
+            Object[] fila = new Object[columnas.length];
+            fila[0] = libro.getCodigo();
+            fila[1] = libro.getTitulo();
+            fila[2] = libro.getAutor();
+            fila[3] = libro.getCategoria();
+            fila[4] = libro.getAnioPublicacion();
+            fila[5] = libro.getCopiasDisponibles();
+            fila[6] = libro.getEditorial();
 
-            jTable1.setModel(modelo);
-        } catch (IOException ex) {
-            JOptionPane.showMessageDialog(this, "Error al listar los libros: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            modelo.addRow(fila);
         }
+
+        jTable1.setModel(modelo);
+    } catch (IOException ex) {
+        JOptionPane.showMessageDialog(this, "Error al listar los libros: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+    }
     }//GEN-LAST:event_btnListarActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-        // Obtener el código del libro a eliminar desde un campo de texto de búsqueda o selección
-        String codigoLibro = txtBusqueda.getText();  // Por ejemplo, si se ingresa el código en un campo de texto
+        String codigoLibro = JOptionPane.showInputDialog(this, "Ingrese el código del libro a eliminar:");
 
-        if (codigoLibro.isEmpty()) {
+        if (codigoLibro == null || codigoLibro.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Por favor ingresa un código de libro válido.", "Error", JOptionPane.ERROR_MESSAGE);
         } else {
-            // Mostrar el diálogo de confirmación
             int confirmacion = JOptionPane.showConfirmDialog(
                 this, 
-                "¿Estás seguro de que deseas eliminar el libro con código: " + codigoLibro + "?", 
+                "¿Estás seguro de que deseas eliminar el libro con código: " + codigoLibro + "?",
                 "Confirmar Eliminación", 
                 JOptionPane.YES_NO_OPTION,
                 JOptionPane.WARNING_MESSAGE
             );
 
-            // Si el usuario confirma la eliminación
             if (confirmacion == JOptionPane.YES_OPTION) {
                 try {
-                    // Llamar al método para eliminar el libro
                     ListaLibros.eliminarLibro(codigoLibro);
                     JOptionPane.showMessageDialog(this, "Libro eliminado correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
 
-                    // Actualizar la tabla después de la eliminación
                     DefaultTableModel modelo = new DefaultTableModel();
-                    String[] columnas = {"ID", "Código", "Título", "Autor", "Categoría", "Año", "Copias Disponibles", "Editorial"};
+                    String[] columnas = {"Código", "Título", "Autor", "Categoría", "Año", "Copias Disponibles", "Editorial"};
                     modelo.setColumnIdentifiers(columnas);
-                    ListaLibros.listarTodos(modelo);
+
+                    ArrayList<Libro> libros = ListaLibros.listarTodos();  // Obtener la lista de libros actualizada
+                    for (Libro libro : libros) {
+                        modelo.addRow(new Object[]{
+                            libro.getCodigo(),
+                            libro.getTitulo(),
+                            libro.getAutor(),
+                            libro.getCategoria(),
+                            libro.getAnioPublicacion(),
+                            libro.getCopiasDisponibles(),
+                            libro.getEditorial()
+                        });
+                    }
+
                     jTable1.setModel(modelo);
                 } catch (IOException ex) {
                     JOptionPane.showMessageDialog(this, "Error al eliminar el libro: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -346,7 +368,54 @@ public class panLibros extends javax.swing.JPanel {
     }//GEN-LAST:event_btnAgregarActionPerformed
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
-        // TODO add your handling code here:
+        String textoBusqueda = txtBusqueda.getText().trim();
+
+        if (textoBusqueda.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Por favor ingresa un término de búsqueda.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        ArrayList<Libro> librosEncontrados = new ArrayList<>();
+
+        try {
+            if (jRadioButton1.isSelected()) {  // Buscar por Autor
+                librosEncontrados = ListaLibros.buscarPorAutor(textoBusqueda);
+            } else if (jRadioButton2.isSelected()) {  // Buscar por Título
+                librosEncontrados = ListaLibros.buscarPorTitulo(textoBusqueda);
+            } else if (jRadioButton3.isSelected()) {  // Buscar por Código
+                librosEncontrados = ListaLibros.buscarPorCodigo(textoBusqueda);
+            } else if (jRadioButton4.isSelected()) {  // Buscar por Categoría
+                librosEncontrados = ListaLibros.buscarPorCategoria(textoBusqueda);
+            } else {
+                JOptionPane.showMessageDialog(this, "Por favor selecciona un criterio de búsqueda.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            DefaultTableModel modelo = new DefaultTableModel();
+            String[] columnas = { "Código", "Título", "Autor", "Categoría", "Año", "Copias Disponibles", "Editorial" };
+            modelo.setColumnIdentifiers(columnas);
+
+            if (librosEncontrados.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "No se encontraron libros que coincidan con la búsqueda.", "Resultado", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                for (Libro libro : librosEncontrados) {
+                    modelo.addRow(new Object[]{
+                        libro.getCodigo(),
+                        libro.getTitulo(),
+                        libro.getAutor(),
+                        libro.getCategoria(),
+                        libro.getAnioPublicacion(),
+                        libro.getCopiasDisponibles(),
+                        libro.getEditorial()
+                    });
+                }
+            }
+
+            jTable1.setModel(modelo);
+
+        } catch (IOException ex) {
+            JOptionPane.showMessageDialog(this, "Error al realizar la búsqueda: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_btnBuscarActionPerformed
 
 

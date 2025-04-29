@@ -154,27 +154,33 @@ public class IfrmEditar extends javax.swing.JInternalFrame {
         String fechaPrevista = txtFechaPrevista.getText();
         String codigoLibro = txtCodigo.getText();
         
-        
         if(id.isEmpty() || fechaPrevista.isEmpty() || codigoLibro.isEmpty()){
             JOptionPane.showMessageDialog(null, "Por favor complete todos los campos.");
         } else {
-            try{  
+            try {
                 int Id = Integer.parseInt(id);
-                HistorialPrestamos historialPrestamos = new HistorialPrestamos();
-                Libro libro = new Libro();
-                libro = ListaLibros.buscarPorCodigo(codigoLibro);
-                historialPrestamos.editarPrestamo(Id, fechaPrevista, libro);
-                JOptionPane.showMessageDialog(null, "Libro actualizado correctamente.");
                 
+                HistorialPrestamos historialPrestamos = new HistorialPrestamos();
+                
+                ArrayList<Libro> librosEncontrados = ListaLibros.buscarPorCodigo(codigoLibro);
+                
+                if (librosEncontrados.isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "El código de libro no existe.");
+                    
+                }
+                
+                Libro libro = librosEncontrados.get(0);
+                
+                historialPrestamos.editarPrestamo(Id, fechaPrevista, libro);
+
+                JOptionPane.showMessageDialog(null, "Libro actualizado correctamente.");
+
             } catch (NumberFormatException e) {
-                // Si ocurre un error al convertir los valores numéricos, mostrar un mensaje
                 JOptionPane.showMessageDialog(null, "Error: ID no es válido.");
             } catch (IOException e) {
-                // Manejar cualquier excepción de I/O al guardar el libro
                 JOptionPane.showMessageDialog(null, "Error al guardar los datos: " + e.getMessage());
             }
-        }
-            
+        } 
     }//GEN-LAST:event_jButton1ActionPerformed
 
 
