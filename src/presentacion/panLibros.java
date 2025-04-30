@@ -43,34 +43,62 @@ public class panLibros extends javax.swing.JPanel {
         };
         
     }
-    
-    private void ordenarAscendentePorTitulo(ArrayList<Libro> lista) {
-        Collections.sort(lista, new CompararLibroPorTitulo());  // Ordenar por título ascendente
-        actualizarTabla();  // Actualizar la tabla con los libros ordenados
-    }
+//    private void ordenarAscendentePorTitulo() {
+//        listaLibros = DALInventarioLibro.obtenerInventario();  // Obtener los libros desde el DAL
+//        Collections.sort(listaLibros, new CompararPorTituloAscendente());  // Ordenar por título ascendente
+//        actualizarTabla(listaLibros);  // Actualizar la tabla con los libros ordenados
+//    }
+//    private void ordenarDescendentePorTitulo() {
+//        listaLibros = DALInventarioLibro.obtenerInventario();  // Obtener los libros desde el DAL
+//        Collections.sort(listaLibros, new CompararPorTituloDescendente());  // Ordenar por título descendente
+//        actualizarTabla(listaLibros);  // Actualizar la tabla con los libros ordenados
+//    }
+//    private void ordenarAscendentePorCategoria() {
+//        listaLibros = DALInventarioLibro.obtenerInventario();  // Obtener los libros desde el DAL
+//        Collections.sort(listaLibros, new CompararPorCategoriaAscendente());  // Ordenar por categoría ascendente
+//        actualizarTabla(listaLibros);  // Actualizar la tabla con los libros ordenados
+//    }
+//    private void ordenarDescendentePorCategoria() {
+//        listaLibros = DALInventarioLibro.obtenerInventario();  // Obtener los libros desde el DAL
+//        Collections.sort(listaLibros, new CompararPorCategoriaDescendente());  // Ordenar por categoría descendente
+//        actualizarTabla(listaLibros);  // Actualizar la tabla con los libros ordenados
+//    }
 
-    private void ordenarAscendentePorCategoria(ArrayList<Libro> lista) {
-        Collections.sort(lista, new CompararLibroPorCategoria());  // Ordenar por categoría ascendente
-        actualizarTabla();  // Actualizar la tabla con los libros ordenados
-    }
-
-    private void ordenarDescendentePorTitulo(ArrayList<Libro> lista) {
-        Collections.sort(lista, new CompararLibroPorTitulo());  // Ordenar por título ascendente
-        Collections.reverse(lista);  // Revertir el orden para obtener un orden descendente
-        actualizarTabla();  // Actualizar la tabla con los libros ordenados
-    }
-
-    private void ordenarDescendentePorCategoria(ArrayList<Libro> lista) {
-        Collections.sort(lista, new CompararLibroPorCategoria());  // Ordenar por categoría ascendente
-        Collections.reverse(lista);  // Revertir el orden para obtener un orden descendente
-        actualizarTabla();  // Actualizar la tabla con los libros ordenados
-    }
     
    private void actualizarTabla() {
         // Recargar la lista de libros
         ArrayList<Libro> listaLibros = DALInventarioLibro.obtenerInventario(); // Obtener los libros actualizados desde el DAL
 
         // Crear el modelo de la tabla con las columnas necesarias
+        String[] columnas = {"Código", "Título", "Autor", "Categoría", "Año Publicación", "Copias Disponibles", "Editorial"};
+        DefaultTableModel modelo = new DefaultTableModel(null, columnas);
+
+        // Llenar el modelo con los libros de la lista ordenada, excluyendo los vacíos
+        for (Libro libro : listaLibros) {
+            // Verifica si el libro está vacío (campos nulos o con valores predeterminados)
+            if (libro.getCodigo().isEmpty() || libro.getTitulo().isEmpty() || libro.getAutor().isEmpty() ||
+                libro.getCategoria().isEmpty() || libro.getAnioPublicacion() == 0 || libro.getCopiasDisponibles() == 0 ||
+                libro.getEditorial().isEmpty()) {
+                continue;  // Saltar los libros vacíos
+            }
+
+            // Agregar el libro a la tabla si no es vacío
+            Object[] fila = new Object[columnas.length];
+            fila[0] = libro.getCodigo();
+            fila[1] = libro.getTitulo();
+            fila[2] = libro.getAutor();
+            fila[3] = libro.getCategoria();
+            fila[4] = libro.getAnioPublicacion();
+            fila[5] = libro.getCopiasDisponibles();
+            fila[6] = libro.getEditorial();
+            modelo.addRow(fila);
+        }
+
+        // Establecer el modelo de la tabla
+        jTable1.setModel(modelo); // Asegúrate de que el nombre de la tabla sea correcto
+    }
+   
+    private void actualizarTabla(ArrayList<Libro> listaLibros) {
         String[] columnas = {"Código", "Título", "Autor", "Categoría", "Año Publicación", "Copias Disponibles", "Editorial"};
         DefaultTableModel modelo = new DefaultTableModel(null, columnas);
 
@@ -88,7 +116,7 @@ public class panLibros extends javax.swing.JPanel {
         }
 
         // Establecer el modelo de la tabla
-        jTable1.setModel(modelo); // Asegúrate de que el nombre de la tabla sea correcto
+        jTable1.setModel(modelo);  // Asegúrate de que el nombre de la tabla sea correcto
     }
     
     /**
@@ -410,7 +438,7 @@ public class panLibros extends javax.swing.JPanel {
     }//GEN-LAST:event_btnListarActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-        // Pedir el código del libro a eliminar mediante un JOptionPane
+         // Pedir el código del libro a eliminar mediante un JOptionPane
         String codigoEliminar = JOptionPane.showInputDialog(this, "Ingrese el código del libro a eliminar:");
 
         // Validar si el código está vacío
@@ -419,17 +447,21 @@ public class panLibros extends javax.swing.JPanel {
             return;
         }
 
+        // Normalizar el código para comparación insensible a mayúsculas/minúsculas
+        codigoEliminar = codigoEliminar.trim().toLowerCase();
+
         try {
-            // Llamar al método de DAL para eliminar el libro
+            // Llamar al método de DAL para eliminar el libro (sobrescribir con un libro vacío)
             DALInventarioLibro.eliminarLibro(codigoEliminar);
 
             // Mostrar mensaje de éxito
             JOptionPane.showMessageDialog(this, "Libro eliminado exitosamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-            actualizarTabla();
 
             // Actualizar la tabla para reflejar los cambios
-            btnListarActionPerformed(evt); // Llamamos al método de listar para actualizar la tabla
+            actualizarTabla();
+
         } catch (IOException e) {
+            // Si ocurre un error, mostrar mensaje de error
             JOptionPane.showMessageDialog(this, "Error al eliminar el libro: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnEliminarActionPerformed
@@ -496,25 +528,25 @@ public class panLibros extends javax.swing.JPanel {
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void jrbAscendenteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jrbAscendenteActionPerformed
-        ArrayList<Libro> listaLibros = DALInventarioLibro.obtenerInventario(); // Obtener los libros desde el DAL
-    
-        if (jrbOrdenarTitulo.isSelected()) {
-            ordenarAscendentePorTitulo(listaLibros);
-        } else if (jrbOrdenarCategoria.isSelected()) {
-            ordenarAscendentePorCategoria(listaLibros);
-        }
-        actualizarTabla();
+//        ArrayList<Libro> listaLibros = DALInventarioLibro.obtenerInventario(); // Obtener los libros desde el DAL
+//    
+//        if (jrbOrdenarTitulo.isSelected()) {
+//            ordenarAscendentePorTitulo(listaLibros);
+//        } else if (jrbOrdenarCategoria.isSelected()) {
+//            ordenarAscendentePorCategoria(listaLibros);
+//        }
+//        actualizarTabla();
     }//GEN-LAST:event_jrbAscendenteActionPerformed
 
     private void jrbDescendenteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jrbDescendenteActionPerformed
-        ArrayList<Libro> listaLibros = DALInventarioLibro.obtenerInventario();
-
-        if (jrbOrdenarTitulo.isSelected()) {
-            ordenarDescendentePorTitulo(listaLibros);
-        } else if (jrbOrdenarCategoria.isSelected()) {
-            ordenarDescendentePorCategoria(listaLibros);
-        }
-        actualizarTabla();
+//        ArrayList<Libro> listaLibros = DALInventarioLibro.obtenerInventario();
+//
+//        if (jrbOrdenarTitulo.isSelected()) {
+//            ordenarDescendentePorTitulo(listaLibros);
+//        } else if (jrbOrdenarCategoria.isSelected()) {
+//            ordenarDescendentePorCategoria(listaLibros);
+//        }
+//        actualizarTabla();
     }//GEN-LAST:event_jrbDescendenteActionPerformed
 
 
@@ -548,4 +580,5 @@ public class panLibros extends javax.swing.JPanel {
     private Color botonBlanco = new Color(60,176,200);
     private Color presionadoBuscar = new Color(40,156,180);
     private Color encimaBuscar = new Color(50,166,190);
+    private ArrayList<Libro> listaLibros;
 }

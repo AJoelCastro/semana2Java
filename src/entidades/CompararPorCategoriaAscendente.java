@@ -9,9 +9,9 @@ import java.util.Comparator;
  *
  * @author ArcosArce
  */
-public class CompararPrestamoPorUsuario implements Comparator<PrestamoBibliotecario> {
+class CompararPorCategoriaAscendente implements Comparator<Libro> {
     @Override
-    public int compare(PrestamoBibliotecario p1, PrestamoBibliotecario p2) {
-        return p1.getLibro().getTitulo().compareTo(p2.getLibro().getTitulo());
+    public int compare(Libro libro1, Libro libro2) {
+        return libro1.getCategoria().compareToIgnoreCase(libro2.getCategoria());  // Orden ascendente
     }
 }
