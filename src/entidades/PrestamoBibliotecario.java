@@ -12,6 +12,7 @@ import java.util.GregorianCalendar;
  * @author Administrador
  */
 public class PrestamoBibliotecario {
+
     private int idPrestamo;
     private String fechaPrestamo;
     private String fechaPrevista;
@@ -23,7 +24,7 @@ public class PrestamoBibliotecario {
     private int cantidadLibros = 0;
 
     public PrestamoBibliotecario() {
-        this(0,"--/--/--",new Libro(), new Usuario());
+        this(0, "--/--/--", new Libro(), new Usuario());
     }
 
     public PrestamoBibliotecario(int idPrestamo, String fechaPrevista, Libro libro, Usuario usuario) {
@@ -33,7 +34,7 @@ public class PrestamoBibliotecario {
         this.usuario = usuario;
         this.libro = libro;
     }
-    
+
     // Método para obtener la fecha actual en formato "dd/MM/yyyy" usando GregorianCalendar
     private static String obtenerFechaActual() {
         GregorianCalendar calendario = new GregorianCalendar(); // Crear un objeto GregorianCalendar
@@ -112,7 +113,12 @@ public class PrestamoBibliotecario {
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
     }
-    
+
+    public int getTamaño() {
+        return getFechaPrestamo().length() * 2 + getFechaDevolucion().length() * 2 + getFechaPrevista().length() * 2 + getUsuario().getNombre().length()*2 + getUsuario().getCorreo().length()*2 + 
+                + getLibro().getTitulo().length()*2 + getLibro().getAutor().length()*2 + getUsuario().getTelefono().length()*2 + 4 + 4;
+    }
+
     @Override
     public String toString() {
         return "Nombre del libro: " + libro.getTitulo()
@@ -125,4 +131,3 @@ public class PrestamoBibliotecario {
                 + "Cantidad de Libros: " + getCantidadLibros();
     }
 }
-

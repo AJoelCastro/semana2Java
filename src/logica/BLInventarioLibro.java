@@ -83,6 +83,18 @@ public class BLInventarioLibro {
 
         return encontrados;
     }
+    public static Libro buscarPorCodigo(String codigo) {
+        ArrayList<Libro> libros = DALInventarioLibro.obtenerInventario();
+        Libro libroEncontrado = new Libro();
+        
+        for (Libro libro : libros) {
+            if (libro.getCodigo().equals(codigo)) {
+                libroEncontrado = libro;
+            }
+        }
+
+        return libroEncontrado;
+    }
 
     // Método para obtener el número total de registros de libros
     public static int obtenerNumeroRegistros() {

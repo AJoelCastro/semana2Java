@@ -22,7 +22,7 @@ public class HistorialPrestamos {
 
     private final String nombreArchivo = "Historial Prestamos.txt";
 
-    public ArrayList<PrestamoBibliotecario> leerIngresos() {
+    public ArrayList<PrestamoBibliotecario> leerIngresos() { 
         ArrayList<PrestamoBibliotecario> historialPrestamos = new ArrayList<>();
         File archivo = new File(nombreArchivo);
         if (!archivo.exists()){
@@ -72,6 +72,17 @@ public class HistorialPrestamos {
             }
         }
         return prestamos;
+    }
+    
+    public Usuario buscarUsuarioPorDni(int dni) {
+        Usuario usuario = new Usuario();
+        ArrayList<PrestamoBibliotecario> lista = leerIngresos();
+        for (PrestamoBibliotecario prestamo : lista) {
+            if(dni == prestamo.getUsuario().getDni()){
+                usuario = prestamo.getUsuario();
+            }
+        }
+        return usuario;
     }
 
     
@@ -214,7 +225,7 @@ public class HistorialPrestamos {
             fila[7] = prestamo.getFechaPrevista();
             modelo.addRow(fila);
         }
-
         return modelo;
     }
+    
 }
