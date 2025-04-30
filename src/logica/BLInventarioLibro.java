@@ -84,24 +84,6 @@ public class BLInventarioLibro {
         return encontrados;
     }
 
-    // Método para eliminar un libro por código
-    public static void eliminarLibro(String codigoBuscado) {
-        try {
-            DALInventarioLibro.eliminarLibro(codigoBuscado); // Llamada al DAL para eliminar el libro
-        } catch (IOException e) {
-            JOptionPane.showMessageDialog(null, "Error al eliminar libro: " + e.getMessage());
-        }
-    }
-
-    // Método para editar un libro por código
-    public static void editarLibro(String codigoBuscado, Libro nuevoLibro) {
-        try {
-            DALInventarioLibro.editarLibro(codigoBuscado, nuevoLibro); // Llamada al DAL para editar el libro
-        } catch (IOException e) {
-            JOptionPane.showMessageDialog(null, "Error al editar libro: " + e.getMessage());
-        }
-    }
-
     // Método para obtener el número total de registros de libros
     public static int obtenerNumeroRegistros() {
         return DALInventarioLibro.obtenerNumeroRegistros();
