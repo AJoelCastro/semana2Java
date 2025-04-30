@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import entidades.*;
 import java.io.File;
 import javax.swing.table.DefaultTableModel;
+import logica.*;
 
 /**
  *
@@ -161,7 +162,7 @@ public class DALHistorialPrestamos {
             String telefonoUsuario = flujo.readUTF();
             String direccionUsuario = flujo.readUTF();
             Libro libro = new Libro();
-            libro = Llibro.buscarPorTitulo(titulo);
+            libro = BLInventarioLibro.buscarPorCodigo(codigo);
             Usuario usuario = new Usuario();
             usuario = Hp.buscarUsuarioPorDni(dniUsuario);
             PrestamoBibliotecario Pb = new PrestamoBibliotecario(idPrestamo, fechaPrevista, libro, usuario);
