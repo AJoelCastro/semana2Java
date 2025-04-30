@@ -49,7 +49,7 @@ public class DALHistorialPrestamos {
         }
     }
     
-       public ArrayList<PrestamoBibliotecario> leerIngresos() { 
+       public static ArrayList<PrestamoBibliotecario> leerIngresos() { 
         ArrayList<PrestamoBibliotecario> historialPrestamos = new ArrayList<>();
         File archivo = new File(N_ARCHIVO);
         if (!archivo.exists()){
@@ -133,8 +133,7 @@ public class DALHistorialPrestamos {
     }
 
     public static PrestamoBibliotecario getPrestamoBibliotecario(int pos) {
-        ListaLibros Llibro = new ListaLibros();
-        HistorialPrestamos Hp = new HistorialPrestamos();
+        DALHistorialPrestamos Hp = new DALHistorialPrestamos();
         String nombreU, correo, telefono, titulo, estado, fechDev, fechPre, fechPres, autor;
         int idPrestamo, cantidad, dni;
         PrestamoBibliotecario empleado = null;
@@ -290,8 +289,8 @@ public class DALHistorialPrestamos {
         }
     }
     
-    public void eliminarPrestamo(int idPrestamo) {
-        ArrayList<PrestamoBibliotecario> historialPrestamos = leerIngresos();
+    public static void eliminarPrestamo(int idPrestamo) {
+        ArrayList<PrestamoBibliotecario> historialPrestamos = DALHistorialPrestamos.leerIngresos();
         boolean borrado = historialPrestamos.removeIf(p -> p.getIdPrestamo() == idPrestamo);
         if (borrado) {
             guardarHistorialCompleto(historialPrestamos);
@@ -316,7 +315,7 @@ public class DALHistorialPrestamos {
         guardarHistorialCompleto(historialPrestamos);
     }
 
-    public void guardarHistorialCompleto(ArrayList<PrestamoBibliotecario> lista) {
+    public static void guardarHistorialCompleto(ArrayList<PrestamoBibliotecario> lista) {
         try (RandomAccessFile raf = new RandomAccessFile(N_ARCHIVO, "rw")) {
             raf.setLength(0);
 
@@ -345,15 +344,15 @@ public class DALHistorialPrestamos {
             System.out.println("Error al guardar historial completo: " + e.getMessage());
         }
     }
-    public DefaultTableModel getContenidoH() { 
+    public static DefaultTableModel getContenidoH() { 
         DefaultTableModel modelo = new DefaultTableModel();
         String[] columnas = {
             "Libro", "Autor", "Id Prestamo",
             "Usuario","Correo", "Telefono", "Fecha-Prestamo", "Fecha-Prevista"
         };
         modelo.setColumnIdentifiers(columnas);
-
-        ArrayList<PrestamoBibliotecario> lista = leerIngresos();
+        ArrayList<PrestamoBibliotecario> lista = DALHistorialPrestamos.leerIngresos();
+        DALHistorialPrestamos.leerIngresos();
         System.out.println("lista"+lista);
         for (PrestamoBibliotecario prestamo : lista) {
             Object[] fila = new Object[columnas.length];
