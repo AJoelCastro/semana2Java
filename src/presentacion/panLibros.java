@@ -10,7 +10,6 @@ import datos.*;
 import entidades.*;
 import java.io.IOException;
 import javax.swing.table.DefaultTableModel;
-import datos.ListaLibros.*;
 import java.util.ArrayList;
 import java.util.*;
 import logica.*;

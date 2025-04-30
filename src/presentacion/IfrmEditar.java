@@ -4,8 +4,7 @@
  */
 package presentacion;
 
-import datos.HistorialPrestamos;
-import datos.ListaLibros;
+import datos.DALHistorialPrestamos;
 import entidades.Libro;
 import entidades.PrestamoBibliotecario;
 import entidades.Usuario;
@@ -13,6 +12,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import logica.*;
 
 /**
  *
@@ -160,9 +160,9 @@ public class IfrmEditar extends javax.swing.JInternalFrame {
             try {
                 int Id = Integer.parseInt(id);
                 
-                HistorialPrestamos historialPrestamos = new HistorialPrestamos();
+                DALHistorialPrestamos historialPrestamos = new DALHistorialPrestamos();
                 
-                ArrayList<Libro> librosEncontrados = ListaLibros.buscarPorCodigo(codigoLibro);
+                ArrayList<Libro> librosEncontrados = BLInventarioLibro.buscarLibro("codigo",codigoLibro);
                 
                 if (librosEncontrados.isEmpty()) {
                     JOptionPane.showMessageDialog(null, "El código de libro no existe.");
@@ -177,8 +177,6 @@ public class IfrmEditar extends javax.swing.JInternalFrame {
 
             } catch (NumberFormatException e) {
                 JOptionPane.showMessageDialog(null, "Error: ID no es válido.");
-            } catch (IOException e) {
-                JOptionPane.showMessageDialog(null, "Error al guardar los datos: " + e.getMessage());
             }
         } 
     }//GEN-LAST:event_jButton1ActionPerformed

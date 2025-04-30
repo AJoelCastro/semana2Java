@@ -5,6 +5,7 @@
 package presentacion;
 
 import datos.*;
+import logica.*;
 import entidades.*;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -285,9 +286,7 @@ public class IfrmRegistroPrestamos extends javax.swing.JInternalFrame {
 
                 Usuario nuevoUsuario = new Usuario(nombre, apellido, Dni, correo, telefono, direccion);
 
-                ListaLibros listaLibros = new ListaLibros();
-
-                ArrayList<Libro> librosEncontrados = listaLibros.buscarPorCodigo(codigoLibro);
+                ArrayList<Libro> librosEncontrados = BLInventarioLibro.buscarLibro("codigo",codigoLibro);
 
                 if (librosEncontrados.isEmpty()) {
                     JOptionPane.showMessageDialog(null, "El código de libro no existe.");
@@ -295,9 +294,8 @@ public class IfrmRegistroPrestamos extends javax.swing.JInternalFrame {
                 }
 
                 Libro nuevoLibro = librosEncontrados.get(0);
-
-                HistorialPrestamos historialPrestamos = new HistorialPrestamos();
-                ArrayList<PrestamoBibliotecario> lista = historialPrestamos.leerIngresos();
+                
+                ArrayList<PrestamoBibliotecario> lista = BLHistorialPrestamos.getContenido();
 
                 for (PrestamoBibliotecario prestamo1 : lista) {
                     if (prestamo1.getIdPrestamo() == Id) {  // Verifica el ID de préstamo
@@ -308,12 +306,10 @@ public class IfrmRegistroPrestamos extends javax.swing.JInternalFrame {
 
                 PrestamoBibliotecario nuevoPrestamo = new PrestamoBibliotecario(Id, fechaPrevista, nuevoLibro, nuevoUsuario);
 
-                historialPrestamos.aniadirPrestamo(nuevoPrestamo);
+                DALHistorialPrestamos.escribirPrestamos(nuevoPrestamo);
                 JOptionPane.showMessageDialog(null, "Préstamo registrado correctamente.");
             } catch (NumberFormatException e) {
                 JOptionPane.showMessageDialog(null, "Error: Año de publicación o Copias no son válidos.");
-            } catch (IOException e) {
-                JOptionPane.showMessageDialog(null, "Error al guardar el préstamo: " + e.getMessage());
             }
         }
     }//GEN-LAST:event_btnGuardarActionPerformed
