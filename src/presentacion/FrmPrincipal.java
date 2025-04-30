@@ -236,4 +236,5 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private Color presionadoMenu = new Color(60,60,60);
     private Color encimaMenu = new Color(50,50,50);
     private Color botonMenu= new Color(30,30,30);
+    
 }
