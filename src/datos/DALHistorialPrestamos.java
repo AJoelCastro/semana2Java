@@ -261,7 +261,7 @@ public class DALHistorialPrestamos {
 
         return prestamos;
     }
-    public void aniadirPrestamo(PrestamoBibliotecario prestamo) {
+    public static void aniadirPrestamo(PrestamoBibliotecario prestamo) {
         try (RandomAccessFile raf = new RandomAccessFile(N_ARCHIVO, "rw")) {
             raf.seek(raf.length());
             
@@ -307,10 +307,7 @@ public class DALHistorialPrestamos {
             if(prest.getIdPrestamo() == prestamo.getIdPrestamo()){
                 prestamo.setFechaPrevista(newDatePrevista);
                 prestamo.setLibro(lib);
-            }else{
-                return;
             }
-            
         }
         guardarHistorialCompleto(historialPrestamos);
     }
@@ -351,9 +348,7 @@ public class DALHistorialPrestamos {
             "Usuario","Correo", "Telefono", "Fecha-Prestamo", "Fecha-Prevista"
         };
         modelo.setColumnIdentifiers(columnas);
-        ArrayList<PrestamoBibliotecario> lista = DALHistorialPrestamos.leerIngresos();
-        DALHistorialPrestamos.leerIngresos();
-        System.out.println("lista"+lista);
+        ArrayList<PrestamoBibliotecario> lista = leerIngresos();
         for (PrestamoBibliotecario prestamo : lista) {
             Object[] fila = new Object[columnas.length];
             fila[0] = prestamo.getLibro().getTitulo();

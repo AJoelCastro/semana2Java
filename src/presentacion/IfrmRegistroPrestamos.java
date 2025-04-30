@@ -285,18 +285,15 @@ public class IfrmRegistroPrestamos extends javax.swing.JInternalFrame {
                 int Id = Integer.parseInt(id);
 
                 Usuario nuevoUsuario = new Usuario(nombre, apellido, Dni, correo, telefono, direccion);
-
                 ArrayList<Libro> librosEncontrados = BLInventarioLibro.buscarLibro("codigo",codigoLibro);
-
+                
                 if (librosEncontrados.isEmpty()) {
                     JOptionPane.showMessageDialog(null, "El código de libro no existe.");
                     return; // Salir del método si el código de libro no es válido
                 }
 
                 Libro nuevoLibro = librosEncontrados.get(0);
-                
-                ArrayList<PrestamoBibliotecario> lista = BLHistorialPrestamos.getContenido();
-
+                ArrayList<PrestamoBibliotecario> lista = DALHistorialPrestamos.getContenido();
                 for (PrestamoBibliotecario prestamo1 : lista) {
                     if (prestamo1.getIdPrestamo() == Id) {  // Verifica el ID de préstamo
                         JOptionPane.showMessageDialog(null, "El ID de préstamo ya existe. Por favor, elija otro.");
@@ -305,8 +302,7 @@ public class IfrmRegistroPrestamos extends javax.swing.JInternalFrame {
                 }
 
                 PrestamoBibliotecario nuevoPrestamo = new PrestamoBibliotecario(Id, fechaPrevista, nuevoLibro, nuevoUsuario);
-
-                DALHistorialPrestamos.escribirPrestamos(nuevoPrestamo);
+                DALHistorialPrestamos.aniadirPrestamo(nuevoPrestamo);
                 JOptionPane.showMessageDialog(null, "Préstamo registrado correctamente.");
             } catch (NumberFormatException e) {
                 JOptionPane.showMessageDialog(null, "Error: Año de publicación o Copias no son válidos.");

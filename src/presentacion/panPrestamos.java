@@ -435,12 +435,12 @@ public class panPrestamos extends javax.swing.JPanel {
             "Usuario","Correo", "Telefono", "Fecha-Prestamo", "Fecha-Prevista"
         };
         modelo.setColumnIdentifiers(columnas);
-        
         modelo = DALHistorialPrestamos.getContenidoH();
+        System.out.println("modelo"+modelo);
         if (modelo != null) {
             tblPrestamos.setModel(modelo);
         } else {
-        JOptionPane.showMessageDialog(this, "No hay profesores registrados");
+            JOptionPane.showMessageDialog(this, "No hay profesores registrados");
         }
     }//GEN-LAST:event_jButton4ActionPerformed
 
