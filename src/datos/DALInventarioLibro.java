@@ -102,34 +102,36 @@ public class DALInventarioLibro {
 
     // Eliminar un libro por código
     public static void eliminarLibro(String codigoBuscado) throws IOException {
-        RandomAccessFile temp = new RandomAccessFile("Temp.dat", "rw");
-        flujo.seek(0);
-        while (flujo.getFilePointer() < flujo.length()) {
-            String codigo = flujo.readUTF();
-            String titulo = flujo.readUTF();
-            String autor = flujo.readUTF();
-            String categoria = flujo.readUTF();
-            int anioPublicacion = flujo.readInt();
-            int copiasDisponibles = flujo.readInt();
-            String editorial = flujo.readUTF();
-            if (!codigo.equalsIgnoreCase(codigoBuscado)) {
-                temp.writeUTF(codigo);
-                temp.writeUTF(titulo);
-                temp.writeUTF(autor);
-                temp.writeUTF(categoria);
-                temp.writeInt(anioPublicacion);
-                temp.writeInt(copiasDisponibles);
-                temp.writeUTF(editorial);
+        // Buscar la posición del libro con el código dado
+        boolean libroEncontrado = false;
+        int posicion = -1;  // Guardamos la posición del libro a eliminar
+        for (int i = 0; i < numRegistros; i++) {
+            Libro libro = getLibro(i);  // Leer el libro en la posición i
+            if (libro.getCodigo().equalsIgnoreCase(codigoBuscado)) {
+                libroEncontrado = true;
+                posicion = i;
+                break;
             }
         }
-        flujo.close();
-        temp.close();
-        java.io.File original = new java.io.File("inventarioLibros.txt");
-        java.io.File temporal = new java.io.File("Temp.dat");
-        if (original.delete()) {
-            temporal.renameTo(original);
+
+        // Si no se encuentra el libro, lanzamos una excepción
+        if (!libroEncontrado) {
+            throw new IOException("El libro con el código proporcionado no existe.");
         }
+
+        // Sobrescribir el libro encontrado con un "libro vacío"
+        Libro libroVacio = new Libro("", "", "", "", 0, 0, "");  // Crear un libro con datos vacíos
+        String mensaje = setLibro(posicion, libroVacio);  // Sobrescribir el libro en esa posición
+
+        if (!mensaje.equals("ok")) {
+            throw new IOException("Error al sobrescribir el libro.");
+        }
+
+        // Actualizar el archivo después de la sobrescritura
         flujo = new RandomAccessFile("inventarioLibros.txt", "rw");
+
+        // Actualizar la tabla o realizar otras acciones necesarias
+        System.out.println("Libro eliminado exitosamente.");
     }
 
     // Editar un libro por código

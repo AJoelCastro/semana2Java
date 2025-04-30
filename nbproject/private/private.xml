@@ -5,22 +5,24 @@
         <group>
             <file>file:/C:/Users/sanar/Desktop/Programacion/Java/POO%20II/Proyecto02/semana2Java/src/presentacion/IfrmLibros.java</file>
             <file>file:/C:/Users/sanar/Desktop/Programacion/Java/POO%20II/Proyecto02/semana2Java/src/entidades/Libro.java</file>
-            <file>file:/C:/Users/sanar/Desktop/Programacion/Java/POO%20II/Proyecto02/semana2Java/src/datos/HistorialPrestamos.java</file>
-            <file>file:/C:/Users/sanar/Desktop/Programacion/Java/POO%20II/Proyecto02/semana2Java/src/entidades/CompararPorAutor.java</file>
+            <file>file:/C:/Users/sanar/Desktop/Programacion/Java/POO%20II/Proyecto02/semana2Java/src/entidades/CompararPorTituloAscendente.java</file>
             <file>file:/C:/Users/sanar/Desktop/Programacion/Java/POO%20II/Proyecto02/semana2Java/src/presentacion/panPrestamos.java</file>
             <file>file:/C:/Users/sanar/Desktop/Programacion/Java/POO%20II/Proyecto02/semana2Java/src/entidades/PrestamoBibliotecario.java</file>
             <file>file:/C:/Users/sanar/Desktop/Programacion/Java/POO%20II/Proyecto02/semana2Java/src/presentacion/panInicio.java</file>
             <file>file:/C:/Users/sanar/Desktop/Programacion/Java/POO%20II/Proyecto02/semana2Java/src/presentacion/IfrmRegistroLibros.java</file>
             <file>file:/C:/Users/sanar/Desktop/Programacion/Java/POO%20II/Proyecto02/semana2Java/src/presentacion/FrmPrincipal.java</file>
             <file>file:/C:/Users/sanar/Desktop/Programacion/Java/POO%20II/Proyecto02/semana2Java/src/entidades/Usuario.java</file>
+            <file>file:/C:/Users/sanar/Desktop/Programacion/Java/POO%20II/Proyecto02/semana2Java/src/logica/BLInventarioLibro.java</file>
             <file>file:/C:/Users/sanar/Desktop/Programacion/Java/POO%20II/Proyecto02/semana2Java/src/presentacion/IfrmRegistroPrestamos.java</file>
             <file>file:/C:/Users/sanar/Desktop/Programacion/Java/POO%20II/Proyecto02/semana2Java/src/presentacion/panLibros.java</file>
-            <file>file:/C:/Users/sanar/Desktop/Programacion/Java/POO%20II/Proyecto02/semana2Java/src/entidades/CompararPorNombreLibro.java</file>
-            <file>file:/C:/Users/sanar/Desktop/Programacion/Java/POO%20II/Proyecto02/semana2Java/src/entidades/CompararPorTitulo.java</file>
+            <file>file:/C:/Users/sanar/Desktop/Programacion/Java/POO%20II/Proyecto02/semana2Java/src/datos/DALInventarioLibro.java</file>
             <file>file:/C:/Users/sanar/Desktop/Programacion/Java/POO%20II/Proyecto02/semana2Java/src/presentacion/BotonPersonalizado.java</file>
             <file>file:/C:/Users/sanar/Desktop/Programacion/Java/POO%20II/Proyecto02/semana2Java/src/presentacion/IfrmEditar.java</file>
-            <file>file:/C:/Users/sanar/Desktop/Programacion/Java/POO%20II/Proyecto02/semana2Java/src/datos/ListaLibros.java</file>
-            <file>file:/C:/Users/sanar/Desktop/Programacion/Java/POO%20II/Proyecto02/semana2Java/src/entidades/CompararPorFechaPrestamo.java</file>
+            <file>file:/C:/Users/sanar/Desktop/Programacion/Java/POO%20II/Proyecto02/semana2Java/src/entidades/CompararPorTituloDescendente.java</file>
+            <file>file:/C:/Users/sanar/Desktop/Programacion/Java/POO%20II/Proyecto02/semana2Java/src/entidades/CompararPorCategoriaAscendente.java</file>
+            <file>file:/C:/Users/sanar/Desktop/Programacion/Java/POO%20II/Proyecto02/semana2Java/src/entidades/CompararPorCategoriaDescendente.java</file>
+            <file>file:/C:/Users/sanar/Desktop/Programacion/Java/POO%20II/Proyecto02/semana2Java/src/datos/DALHistorialPrestamos.java</file>
+            <file>file:/C:/Users/sanar/Desktop/Programacion/Java/POO%20II/Proyecto02/semana2Java/src/logica/BLHistorialPrestamos.java</file>
             <file>file:/C:/Users/sanar/Desktop/Programacion/Java/POO%20II/Proyecto02/semana2Java/src/presentacion/PanelPersonalizado.java</file>
         </group>
     </open-files>
