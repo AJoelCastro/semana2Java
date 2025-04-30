@@ -11,6 +11,8 @@ import datos.*;
 import entidades.*;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import javax.swing.table.DefaultTableModel;
 
 
@@ -41,12 +43,6 @@ public class panPrestamos extends javax.swing.JPanel {
         };
         
     }
-    
-    private void actualizarDatos(){
-        HistorialPrestamos historial = new HistorialPrestamos();
-        DefaultTableModel modelo = historial.getContenido();
-        tblPrestamos.setModel(modelo);
-    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -58,6 +54,7 @@ public class panPrestamos extends javax.swing.JPanel {
     private void initComponents() {
 
         buttonGroup1 = new javax.swing.ButtonGroup();
+        buttonGroup2 = new javax.swing.ButtonGroup();
         ImageIcon icon = new ImageIcon(getClass().getResource("/imagenes/fondoPrestamos.png"));
         Image image = icon.getImage();
         dspFondo = new javax.swing.JDesktopPane(){
@@ -82,6 +79,9 @@ public class panPrestamos extends javax.swing.JPanel {
         jLabel2 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblPrestamos = new javax.swing.JTable();
+        jLabel3 = new javax.swing.JLabel();
+        jRadioButton4 = new javax.swing.JRadioButton();
+        jRadioButton5 = new javax.swing.JRadioButton();
 
         setBackground(new java.awt.Color(255, 255, 255));
 
@@ -139,7 +139,7 @@ public class panPrestamos extends javax.swing.JPanel {
 
         buttonGroup1.add(jRadioButton2);
         jRadioButton2.setFont(new java.awt.Font("Segoe UI Semibold", 0, 12)); // NOI18N
-        jRadioButton2.setText("Lector");
+        jRadioButton2.setText("Codigo");
 
         buttonGroup1.add(jRadioButton1);
         jRadioButton1.setFont(new java.awt.Font("Segoe UI Semibold", 0, 12)); // NOI18N
@@ -173,6 +173,24 @@ public class panPrestamos extends javax.swing.JPanel {
         ));
         jScrollPane1.setViewportView(tblPrestamos);
 
+        jLabel3.setText("Filtrar por:");
+
+        buttonGroup2.add(jRadioButton4);
+        jRadioButton4.setText("Fecha de Prestamo");
+        jRadioButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButton4ActionPerformed(evt);
+            }
+        });
+
+        buttonGroup2.add(jRadioButton5);
+        jRadioButton5.setText("Nombre de Usuario");
+        jRadioButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButton5ActionPerformed(evt);
+            }
+        });
+
         dspFondo.setLayer(jButton4, javax.swing.JLayeredPane.DEFAULT_LAYER);
         dspFondo.setLayer(jButton5, javax.swing.JLayeredPane.DEFAULT_LAYER);
         dspFondo.setLayer(jButton3, javax.swing.JLayeredPane.DEFAULT_LAYER);
@@ -186,6 +204,9 @@ public class panPrestamos extends javax.swing.JPanel {
         dspFondo.setLayer(jButton1, javax.swing.JLayeredPane.DEFAULT_LAYER);
         dspFondo.setLayer(jLabel2, javax.swing.JLayeredPane.DEFAULT_LAYER);
         dspFondo.setLayer(jScrollPane1, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        dspFondo.setLayer(jLabel3, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        dspFondo.setLayer(jRadioButton4, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        dspFondo.setLayer(jRadioButton5, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         javax.swing.GroupLayout dspFondoLayout = new javax.swing.GroupLayout(dspFondo);
         dspFondo.setLayout(dspFondoLayout);
@@ -217,7 +238,12 @@ public class panPrestamos extends javax.swing.JPanel {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jScrollPane1))
-                .addContainerGap(204, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addGroup(dspFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel3)
+                    .addComponent(jRadioButton4)
+                    .addComponent(jRadioButton5))
+                .addContainerGap(55, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, dspFondoLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel1)
@@ -250,7 +276,13 @@ public class panPrestamos extends javax.swing.JPanel {
                         .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 440, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 440, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(dspFondoLayout.createSequentialGroup()
+                        .addComponent(jLabel3)
+                        .addGap(18, 18, 18)
+                        .addComponent(jRadioButton4)
+                        .addGap(18, 18, 18)
+                        .addComponent(jRadioButton5)))
                 .addContainerGap(72, Short.MAX_VALUE))
         );
 
@@ -416,12 +448,20 @@ public class panPrestamos extends javax.swing.JPanel {
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         JInternalFrame interna = new IfrmEditar();
         centrarInternalFrame(interna);
-        actualizarDatos();
     }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void jRadioButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton4ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jRadioButton4ActionPerformed
+
+    private void jRadioButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton5ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jRadioButton5ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.ButtonGroup buttonGroup2;
     private javax.swing.JDesktopPane dspFondo;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
@@ -430,9 +470,12 @@ public class panPrestamos extends javax.swing.JPanel {
     private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JRadioButton jRadioButton1;
     private javax.swing.JRadioButton jRadioButton2;
     private javax.swing.JRadioButton jRadioButton3;
+    private javax.swing.JRadioButton jRadioButton4;
+    private javax.swing.JRadioButton jRadioButton5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTextField jTextField1;

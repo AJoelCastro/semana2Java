@@ -12,6 +12,9 @@ import java.io.IOException;
 import javax.swing.table.DefaultTableModel;
 import datos.ListaLibros.*;
 import java.util.ArrayList;
+import java.util.*;
+import logica.*;
+
 
 /**
  *
@@ -24,6 +27,7 @@ public class panLibros extends javax.swing.JPanel {
      */
     public panLibros() {
         initComponents();
+        actualizarTabla();
     }
     private void centrarInternalFrame (JInternalFrame interna) {
         int x,y;
@@ -41,6 +45,53 @@ public class panLibros extends javax.swing.JPanel {
         
     }
     
+    private void ordenarAscendentePorTitulo(ArrayList<Libro> lista) {
+        Collections.sort(lista, new CompararLibroPorTitulo());  // Ordenar por título ascendente
+        actualizarTabla();  // Actualizar la tabla con los libros ordenados
+    }
+
+    private void ordenarAscendentePorCategoria(ArrayList<Libro> lista) {
+        Collections.sort(lista, new CompararLibroPorCategoria());  // Ordenar por categoría ascendente
+        actualizarTabla();  // Actualizar la tabla con los libros ordenados
+    }
+
+    private void ordenarDescendentePorTitulo(ArrayList<Libro> lista) {
+        Collections.sort(lista, new CompararLibroPorTitulo());  // Ordenar por título ascendente
+        Collections.reverse(lista);  // Revertir el orden para obtener un orden descendente
+        actualizarTabla();  // Actualizar la tabla con los libros ordenados
+    }
+
+    private void ordenarDescendentePorCategoria(ArrayList<Libro> lista) {
+        Collections.sort(lista, new CompararLibroPorCategoria());  // Ordenar por categoría ascendente
+        Collections.reverse(lista);  // Revertir el orden para obtener un orden descendente
+        actualizarTabla();  // Actualizar la tabla con los libros ordenados
+    }
+    
+   private void actualizarTabla() {
+        // Recargar la lista de libros
+        ArrayList<Libro> listaLibros = DALInventarioLibro.obtenerInventario(); // Obtener los libros actualizados desde el DAL
+
+        // Crear el modelo de la tabla con las columnas necesarias
+        String[] columnas = {"Código", "Título", "Autor", "Categoría", "Año Publicación", "Copias Disponibles", "Editorial"};
+        DefaultTableModel modelo = new DefaultTableModel(null, columnas);
+
+        // Llenar el modelo con los libros de la lista ordenada
+        for (Libro libro : listaLibros) {
+            Object[] fila = new Object[columnas.length];
+            fila[0] = libro.getCodigo();
+            fila[1] = libro.getTitulo();
+            fila[2] = libro.getAutor();
+            fila[3] = libro.getCategoria();
+            fila[4] = libro.getAnioPublicacion();
+            fila[5] = libro.getCopiasDisponibles();
+            fila[6] = libro.getEditorial();
+            modelo.addRow(fila);
+        }
+
+        // Establecer el modelo de la tabla
+        jTable1.setModel(modelo); // Asegúrate de que el nombre de la tabla sea correcto
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -51,6 +102,8 @@ public class panLibros extends javax.swing.JPanel {
     private void initComponents() {
 
         buttonGroup1 = new javax.swing.ButtonGroup();
+        buttonGroup2 = new javax.swing.ButtonGroup();
+        buttonGroup3 = new javax.swing.ButtonGroup();
         ImageIcon icon = new ImageIcon(getClass().getResource("/imagenes/fondoLibros.png"));
         Image image = icon.getImage();
         dspFondo = new javax.swing.JDesktopPane(){
@@ -67,15 +120,21 @@ public class panLibros extends javax.swing.JPanel {
         btnEditar = new BotonPersonalizado("", botonBlanco,presionadoBuscar,encimaBuscar);
         btnEliminar = new BotonPersonalizado("", botonBlanco,presionadoBuscar,encimaBuscar);
         btnAgregar = new BotonPersonalizado("", botonBlanco,presionadoBuscar,encimaBuscar);
-        jRadioButton1 = new javax.swing.JRadioButton();
-        jRadioButton2 = new javax.swing.JRadioButton();
-        jRadioButton3 = new javax.swing.JRadioButton();
-        jRadioButton4 = new javax.swing.JRadioButton();
+        jrbBuscarAutor = new javax.swing.JRadioButton();
+        jrbBuscarTitulo = new javax.swing.JRadioButton();
+        jrbBuscarCodigo = new javax.swing.JRadioButton();
+        jrbBuscarCategoria = new javax.swing.JRadioButton();
         jLabel2 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
         txtBusqueda = new javax.swing.JTextField();
         btnBuscar = new BotonPersonalizado("", botonBlanco,presionadoBuscar,encimaBuscar);
+        lblEncabezado = new javax.swing.JLabel();
+        lblOrdenar = new javax.swing.JLabel();
+        jrbOrdenarTitulo = new javax.swing.JRadioButton();
+        jrbOrdenarCategoria = new javax.swing.JRadioButton();
         jLabel1 = new javax.swing.JLabel();
+        jrbAscendente = new javax.swing.JRadioButton();
+        jrbDescendente = new javax.swing.JRadioButton();
 
         setBackground(new java.awt.Color(255, 255, 255));
         setPreferredSize(new java.awt.Dimension(1280, 720));
@@ -143,25 +202,25 @@ public class panLibros extends javax.swing.JPanel {
             }
         });
 
-        buttonGroup1.add(jRadioButton1);
-        jRadioButton1.setFont(new java.awt.Font("Segoe UI Semibold", 0, 12)); // NOI18N
-        jRadioButton1.setForeground(new java.awt.Color(255, 255, 255));
-        jRadioButton1.setText("Autor");
+        buttonGroup1.add(jrbBuscarAutor);
+        jrbBuscarAutor.setFont(new java.awt.Font("Segoe UI Semibold", 0, 12)); // NOI18N
+        jrbBuscarAutor.setForeground(new java.awt.Color(255, 255, 255));
+        jrbBuscarAutor.setText("Autor");
 
-        buttonGroup1.add(jRadioButton2);
-        jRadioButton2.setFont(new java.awt.Font("Segoe UI Semibold", 0, 12)); // NOI18N
-        jRadioButton2.setForeground(new java.awt.Color(255, 255, 255));
-        jRadioButton2.setText("Titulo");
+        buttonGroup1.add(jrbBuscarTitulo);
+        jrbBuscarTitulo.setFont(new java.awt.Font("Segoe UI Semibold", 0, 12)); // NOI18N
+        jrbBuscarTitulo.setForeground(new java.awt.Color(255, 255, 255));
+        jrbBuscarTitulo.setText("Titulo");
 
-        buttonGroup1.add(jRadioButton3);
-        jRadioButton3.setFont(new java.awt.Font("Segoe UI Semibold", 0, 12)); // NOI18N
-        jRadioButton3.setForeground(new java.awt.Color(255, 255, 255));
-        jRadioButton3.setText("Codigo");
+        buttonGroup1.add(jrbBuscarCodigo);
+        jrbBuscarCodigo.setFont(new java.awt.Font("Segoe UI Semibold", 0, 12)); // NOI18N
+        jrbBuscarCodigo.setForeground(new java.awt.Color(255, 255, 255));
+        jrbBuscarCodigo.setText("Codigo");
 
-        buttonGroup1.add(jRadioButton4);
-        jRadioButton4.setFont(new java.awt.Font("Segoe UI Semibold", 0, 12)); // NOI18N
-        jRadioButton4.setForeground(new java.awt.Color(255, 255, 255));
-        jRadioButton4.setText("Categoria");
+        buttonGroup1.add(jrbBuscarCategoria);
+        jrbBuscarCategoria.setFont(new java.awt.Font("Segoe UI Semibold", 0, 12)); // NOI18N
+        jrbBuscarCategoria.setForeground(new java.awt.Color(255, 255, 255));
+        jrbBuscarCategoria.setText("Categoria");
 
         jLabel2.setFont(new java.awt.Font("Segoe UI Semibold", 0, 14)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
@@ -184,37 +243,75 @@ public class panLibros extends javax.swing.JPanel {
             }
         });
 
-        jLabel1.setFont(new java.awt.Font("Roboto", 1, 24)); // NOI18N
+        lblEncabezado.setFont(new java.awt.Font("Roboto", 1, 24)); // NOI18N
+        lblEncabezado.setForeground(new java.awt.Color(255, 255, 255));
+        lblEncabezado.setText("Control de Libros");
+
+        lblOrdenar.setForeground(new java.awt.Color(255, 255, 255));
+        lblOrdenar.setText("Filtrar por :");
+
+        buttonGroup2.add(jrbOrdenarTitulo);
+        jrbOrdenarTitulo.setForeground(new java.awt.Color(255, 255, 255));
+        jrbOrdenarTitulo.setText("Titulo");
+
+        buttonGroup2.add(jrbOrdenarCategoria);
+        jrbOrdenarCategoria.setForeground(new java.awt.Color(255, 255, 255));
+        jrbOrdenarCategoria.setText("Categoria");
+
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setText("Control de Libros");
+        jLabel1.setText("Tipo de Orden :");
+
+        buttonGroup3.add(jrbAscendente);
+        jrbAscendente.setForeground(new java.awt.Color(255, 255, 255));
+        jrbAscendente.setText("Ascendente");
+        jrbAscendente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jrbAscendenteActionPerformed(evt);
+            }
+        });
+
+        buttonGroup3.add(jrbDescendente);
+        jrbDescendente.setForeground(new java.awt.Color(255, 255, 255));
+        jrbDescendente.setText("Descendente");
+        jrbDescendente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jrbDescendenteActionPerformed(evt);
+            }
+        });
 
         dspFondo.setLayer(jScrollPane1, javax.swing.JLayeredPane.DEFAULT_LAYER);
         dspFondo.setLayer(btnListar, javax.swing.JLayeredPane.DEFAULT_LAYER);
         dspFondo.setLayer(btnEditar, javax.swing.JLayeredPane.DEFAULT_LAYER);
         dspFondo.setLayer(btnEliminar, javax.swing.JLayeredPane.DEFAULT_LAYER);
         dspFondo.setLayer(btnAgregar, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        dspFondo.setLayer(jRadioButton1, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        dspFondo.setLayer(jRadioButton2, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        dspFondo.setLayer(jRadioButton3, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        dspFondo.setLayer(jRadioButton4, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        dspFondo.setLayer(jrbBuscarAutor, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        dspFondo.setLayer(jrbBuscarTitulo, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        dspFondo.setLayer(jrbBuscarCodigo, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        dspFondo.setLayer(jrbBuscarCategoria, javax.swing.JLayeredPane.DEFAULT_LAYER);
         dspFondo.setLayer(jLabel2, javax.swing.JLayeredPane.DEFAULT_LAYER);
         dspFondo.setLayer(jSeparator1, javax.swing.JLayeredPane.DEFAULT_LAYER);
         dspFondo.setLayer(txtBusqueda, javax.swing.JLayeredPane.DEFAULT_LAYER);
         dspFondo.setLayer(btnBuscar, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        dspFondo.setLayer(lblEncabezado, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        dspFondo.setLayer(lblOrdenar, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        dspFondo.setLayer(jrbOrdenarTitulo, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        dspFondo.setLayer(jrbOrdenarCategoria, javax.swing.JLayeredPane.DEFAULT_LAYER);
         dspFondo.setLayer(jLabel1, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        dspFondo.setLayer(jrbAscendente, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        dspFondo.setLayer(jrbDescendente, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         javax.swing.GroupLayout dspFondoLayout = new javax.swing.GroupLayout(dspFondo);
         dspFondo.setLayout(dspFondoLayout);
         dspFondoLayout.setHorizontalGroup(
             dspFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, dspFondoLayout.createSequentialGroup()
-                .addGap(164, 164, 164)
+                .addGap(120, 120, 120)
                 .addGroup(dspFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(btnEditar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnListar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnEliminar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnAgregar, javax.swing.GroupLayout.DEFAULT_SIZE, 152, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 70, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 89, Short.MAX_VALUE)
                 .addGroup(dspFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, dspFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(dspFondoLayout.createSequentialGroup()
@@ -225,26 +322,34 @@ public class panLibros extends javax.swing.JPanel {
                             .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGroup(dspFondoLayout.createSequentialGroup()
                             .addGap(247, 247, 247)
-                            .addComponent(jLabel1)))
+                            .addComponent(lblEncabezado)))
                     .addGroup(dspFondoLayout.createSequentialGroup()
                         .addGap(40, 40, 40)
                         .addComponent(jLabel2)
                         .addGap(70, 70, 70)
-                        .addComponent(jRadioButton1)
+                        .addComponent(jrbBuscarAutor)
                         .addGap(50, 50, 50)
-                        .addComponent(jRadioButton2)
+                        .addComponent(jrbBuscarTitulo)
                         .addGap(50, 50, 50)
-                        .addComponent(jRadioButton3)
+                        .addComponent(jrbBuscarCodigo)
                         .addGap(50, 50, 50)
-                        .addComponent(jRadioButton4))
+                        .addComponent(jrbBuscarCategoria))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 690, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(199, 199, 199))
+                .addGap(18, 18, 18)
+                .addGroup(dspFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblOrdenar)
+                    .addComponent(jrbOrdenarTitulo)
+                    .addComponent(jrbOrdenarCategoria)
+                    .addComponent(jLabel1)
+                    .addComponent(jrbDescendente)
+                    .addComponent(jrbAscendente))
+                .addGap(120, 120, 120))
         );
         dspFondoLayout.setVerticalGroup(
             dspFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, dspFondoLayout.createSequentialGroup()
                 .addGap(40, 40, 40)
-                .addComponent(jLabel1)
+                .addComponent(lblEncabezado)
                 .addGap(12, 12, 12)
                 .addGroup(dspFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -254,10 +359,10 @@ public class panLibros extends javax.swing.JPanel {
                 .addGap(10, 10, 10)
                 .addGroup(dspFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(jRadioButton1)
-                    .addComponent(jRadioButton2)
-                    .addComponent(jRadioButton3)
-                    .addComponent(jRadioButton4))
+                    .addComponent(jrbBuscarAutor)
+                    .addComponent(jrbBuscarTitulo)
+                    .addComponent(jrbBuscarCodigo)
+                    .addComponent(jrbBuscarCategoria))
                 .addGap(48, 48, 48)
                 .addGroup(dspFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(dspFondoLayout.createSequentialGroup()
@@ -268,8 +373,20 @@ public class panLibros extends javax.swing.JPanel {
                         .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnListar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 440, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(59, 59, 59))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 440, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(dspFondoLayout.createSequentialGroup()
+                        .addComponent(lblOrdenar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jrbOrdenarTitulo)
+                        .addGap(18, 18, 18)
+                        .addComponent(jrbOrdenarCategoria)
+                        .addGap(27, 27, 27)
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jrbAscendente)
+                        .addGap(18, 18, 18)
+                        .addComponent(jrbDescendente)))
+                .addContainerGap(72, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -280,85 +397,41 @@ public class panLibros extends javax.swing.JPanel {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(dspFondo, javax.swing.GroupLayout.Alignment.TRAILING)
+            .addComponent(dspFondo)
         );
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
         JInternalFrame interna = new IfrmLibros();
         centrarInternalFrame(interna);
-        
     }//GEN-LAST:event_btnEditarActionPerformed
 
     private void btnListarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnListarActionPerformed
-        try {
-        DefaultTableModel modelo = new DefaultTableModel();
-
-        String[] columnas = {"Código", "Título", "Autor", "Categoría", "Año", "Copias Disponibles", "Editorial"};
-        modelo.setColumnIdentifiers(columnas);
-
-        ArrayList<Libro> libros = ListaLibros.listarTodos();
-
-        for (Libro libro : libros) {
-            Object[] fila = new Object[columnas.length];
-            fila[0] = libro.getCodigo();
-            fila[1] = libro.getTitulo();
-            fila[2] = libro.getAutor();
-            fila[3] = libro.getCategoria();
-            fila[4] = libro.getAnioPublicacion();
-            fila[5] = libro.getCopiasDisponibles();
-            fila[6] = libro.getEditorial();
-
-            modelo.addRow(fila);
-        }
-
-        jTable1.setModel(modelo);
-    } catch (IOException ex) {
-        JOptionPane.showMessageDialog(this, "Error al listar los libros: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-    }
+        actualizarTabla();
     }//GEN-LAST:event_btnListarActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-        String codigoLibro = JOptionPane.showInputDialog(this, "Ingrese el código del libro a eliminar:");
+        // Pedir el código del libro a eliminar mediante un JOptionPane
+        String codigoEliminar = JOptionPane.showInputDialog(this, "Ingrese el código del libro a eliminar:");
 
-        if (codigoLibro == null || codigoLibro.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Por favor ingresa un código de libro válido.", "Error", JOptionPane.ERROR_MESSAGE);
-        } else {
-            int confirmacion = JOptionPane.showConfirmDialog(
-                this, 
-                "¿Estás seguro de que deseas eliminar el libro con código: " + codigoLibro + "?",
-                "Confirmar Eliminación", 
-                JOptionPane.YES_NO_OPTION,
-                JOptionPane.WARNING_MESSAGE
-            );
+        // Validar si el código está vacío
+        if (codigoEliminar == null || codigoEliminar.trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Por favor ingrese un código válido.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
 
-            if (confirmacion == JOptionPane.YES_OPTION) {
-                try {
-                    ListaLibros.eliminarLibro(codigoLibro);
-                    JOptionPane.showMessageDialog(this, "Libro eliminado correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+        try {
+            // Llamar al método de DAL para eliminar el libro
+            DALInventarioLibro.eliminarLibro(codigoEliminar);
 
-                    DefaultTableModel modelo = new DefaultTableModel();
-                    String[] columnas = {"Código", "Título", "Autor", "Categoría", "Año", "Copias Disponibles", "Editorial"};
-                    modelo.setColumnIdentifiers(columnas);
+            // Mostrar mensaje de éxito
+            JOptionPane.showMessageDialog(this, "Libro eliminado exitosamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            actualizarTabla();
 
-                    ArrayList<Libro> libros = ListaLibros.listarTodos();  // Obtener la lista de libros actualizada
-                    for (Libro libro : libros) {
-                        modelo.addRow(new Object[]{
-                            libro.getCodigo(),
-                            libro.getTitulo(),
-                            libro.getAutor(),
-                            libro.getCategoria(),
-                            libro.getAnioPublicacion(),
-                            libro.getCopiasDisponibles(),
-                            libro.getEditorial()
-                        });
-                    }
-
-                    jTable1.setModel(modelo);
-                } catch (IOException ex) {
-                    JOptionPane.showMessageDialog(this, "Error al eliminar el libro: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-                }
-            }
+            // Actualizar la tabla para reflejar los cambios
+            btnListarActionPerformed(evt); // Llamamos al método de listar para actualizar la tabla
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(this, "Error al eliminar el libro: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnEliminarActionPerformed
 
@@ -368,55 +441,82 @@ public class panLibros extends javax.swing.JPanel {
     }//GEN-LAST:event_btnAgregarActionPerformed
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
-        String textoBusqueda = txtBusqueda.getText().trim();
+        // Obtener el término de búsqueda desde el campo de texto txtBusqueda
+        String busqueda = txtBusqueda.getText().trim();
 
-        if (textoBusqueda.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Por favor ingresa un término de búsqueda.", "Error", JOptionPane.ERROR_MESSAGE);
+        // Validar si el término de búsqueda está vacío
+        if (busqueda.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Por favor ingrese un término de búsqueda.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        ArrayList<Libro> librosEncontrados = new ArrayList<>();
+        // Obtener el criterio de búsqueda basado en el JRadioButton seleccionado
+        String criterio = "";
 
-        try {
-            if (jRadioButton1.isSelected()) {  // Buscar por Autor
-                librosEncontrados = ListaLibros.buscarPorAutor(textoBusqueda);
-            } else if (jRadioButton2.isSelected()) {  // Buscar por Título
-                librosEncontrados = ListaLibros.buscarPorTitulo(textoBusqueda);
-            } else if (jRadioButton3.isSelected()) {  // Buscar por Código
-                librosEncontrados = ListaLibros.buscarPorCodigo(textoBusqueda);
-            } else if (jRadioButton4.isSelected()) {  // Buscar por Categoría
-                librosEncontrados = ListaLibros.buscarPorCategoria(textoBusqueda);
-            } else {
-                JOptionPane.showMessageDialog(this, "Por favor selecciona un criterio de búsqueda.", "Error", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-
-            DefaultTableModel modelo = new DefaultTableModel();
-            String[] columnas = { "Código", "Título", "Autor", "Categoría", "Año", "Copias Disponibles", "Editorial" };
-            modelo.setColumnIdentifiers(columnas);
-
-            if (librosEncontrados.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "No se encontraron libros que coincidan con la búsqueda.", "Resultado", JOptionPane.INFORMATION_MESSAGE);
-            } else {
-                for (Libro libro : librosEncontrados) {
-                    modelo.addRow(new Object[]{
-                        libro.getCodigo(),
-                        libro.getTitulo(),
-                        libro.getAutor(),
-                        libro.getCategoria(),
-                        libro.getAnioPublicacion(),
-                        libro.getCopiasDisponibles(),
-                        libro.getEditorial()
-                    });
-                }
-            }
-
-            jTable1.setModel(modelo);
-
-        } catch (IOException ex) {
-            JOptionPane.showMessageDialog(this, "Error al realizar la búsqueda: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        if (jrbBuscarCodigo.isSelected()) {
+            criterio = "codigo";
+        } else if (jrbBuscarTitulo.isSelected()) {
+            criterio = "titulo";
+        } else if (jrbBuscarAutor.isSelected()) {
+            criterio = "autor";
+        } else if (jrbBuscarCategoria.isSelected()) {
+            criterio = "categoria";
+        } else {
+            // Si no se selecciona ningún JRadioButton, mostrar un error
+            JOptionPane.showMessageDialog(this, "Por favor seleccione un criterio de búsqueda.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
         }
+
+        // Llamar al método de BL para buscar libros con el criterio y valor
+        ArrayList<Libro> librosEncontrados = BLInventarioLibro.buscarLibro(criterio, busqueda);
+
+        // Si no se encontraron libros, mostrar mensaje de error
+        if (librosEncontrados.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "No se encontraron libros con el término de búsqueda: " + busqueda, "Resultado de búsqueda", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+
+        // Crear el modelo de la tabla y agregar los libros encontrados
+        String[] columnas = {"Código", "Título", "Autor", "Categoría", "Año Publicación", "Copias Disponibles", "Editorial"};
+        DefaultTableModel modelo = new DefaultTableModel(null, columnas);
+
+        for (Libro libro : librosEncontrados) {
+            Object[] fila = new Object[columnas.length];
+            fila[0] = libro.getCodigo();
+            fila[1] = libro.getTitulo();
+            fila[2] = libro.getAutor();
+            fila[3] = libro.getCategoria();
+            fila[4] = libro.getAnioPublicacion();
+            fila[5] = libro.getCopiasDisponibles();
+            fila[6] = libro.getEditorial();
+            modelo.addRow(fila);
+        }
+
+        // Asignar el modelo a la tabla
+        jTable1.setModel(modelo);
     }//GEN-LAST:event_btnBuscarActionPerformed
+
+    private void jrbAscendenteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jrbAscendenteActionPerformed
+        ArrayList<Libro> listaLibros = DALInventarioLibro.obtenerInventario(); // Obtener los libros desde el DAL
+    
+        if (jrbOrdenarTitulo.isSelected()) {
+            ordenarAscendentePorTitulo(listaLibros);
+        } else if (jrbOrdenarCategoria.isSelected()) {
+            ordenarAscendentePorCategoria(listaLibros);
+        }
+        actualizarTabla();
+    }//GEN-LAST:event_jrbAscendenteActionPerformed
+
+    private void jrbDescendenteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jrbDescendenteActionPerformed
+        ArrayList<Libro> listaLibros = DALInventarioLibro.obtenerInventario();
+
+        if (jrbOrdenarTitulo.isSelected()) {
+            ordenarDescendentePorTitulo(listaLibros);
+        } else if (jrbOrdenarCategoria.isSelected()) {
+            ordenarDescendentePorCategoria(listaLibros);
+        }
+        actualizarTabla();
+    }//GEN-LAST:event_jrbDescendenteActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -426,16 +526,24 @@ public class panLibros extends javax.swing.JPanel {
     private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnListar;
     private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.ButtonGroup buttonGroup2;
+    private javax.swing.ButtonGroup buttonGroup3;
     private javax.swing.JDesktopPane dspFondo;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JRadioButton jRadioButton1;
-    private javax.swing.JRadioButton jRadioButton2;
-    private javax.swing.JRadioButton jRadioButton3;
-    private javax.swing.JRadioButton jRadioButton4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTable jTable1;
+    private javax.swing.JRadioButton jrbAscendente;
+    private javax.swing.JRadioButton jrbBuscarAutor;
+    private javax.swing.JRadioButton jrbBuscarCategoria;
+    private javax.swing.JRadioButton jrbBuscarCodigo;
+    private javax.swing.JRadioButton jrbBuscarTitulo;
+    private javax.swing.JRadioButton jrbDescendente;
+    private javax.swing.JRadioButton jrbOrdenarCategoria;
+    private javax.swing.JRadioButton jrbOrdenarTitulo;
+    private javax.swing.JLabel lblEncabezado;
+    private javax.swing.JLabel lblOrdenar;
     private javax.swing.JTextField txtBusqueda;
     // End of variables declaration//GEN-END:variables
     private Color botonBlanco = new Color(60,176,200);
